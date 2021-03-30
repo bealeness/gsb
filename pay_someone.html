@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <h1 style="font-size: 30px; color: #d35400;">PaySomeone</h1>
+        <h3 class="text-muted">$859.50</h3>
+        <h5 class="text-muted">583-1209</h5>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4" style="color: #d35400;">Fill in your details:</legend>
+                <div class="form-group">
+                    {{ form.receiver.label(class="form-control-label") }}
+                    {% if form.receiver.errors %}
+                        {{ form.receiver(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.receiver.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.receiver(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.amount.label(class="form-control-label") }}
+                    {% if form.amount.errors %}
+                        {{ form.amount(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.amount.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.amount(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.note.label(class="form-control-label") }}
+                    {% if form.note.errors %}
+                        {{ form.note(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.note.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.note(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-warning") }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
