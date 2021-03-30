@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+
+    {% if title %}
+        <title>GSB - {{ title }}</title>
+    {% else %}
+        <title>GSB</title>
+    {% endif %}
+</head>
+<body style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4f/Gisborne_NZ_Sunrise_Waikanae_Beach.jpg');
+                background-size: cover;">
+    <main role="main" class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 style="color: #d35400; padding-top: 120px; font-family: 'Pacifico', sans-serif; font-size: 60px;">Gisborne Securities Bank</h1>
+                <hr>
+                <br>
+                <ul style="font-size: 18px;">
+                    <li>Open an account for an instant $100,000</li>
+                    <li>Make transfers to other account holders</li>
+                    <li>Earn interest in a term deposit</li>
+                    <li>Trade bonds for higher returns</li>
+                </ul>
+                <br>
+                <hr>
+                <h6>*Warning - this is not a real bank, nor real money, nor a real trading platform. It is a simulation only.</h6>
+            </div>
+            <div class="col-md-4">
+                <article class="shadow-lg p-1 bg white rounded">
+                    <div class="card-body" style="padding-top: 50px;">
+                        <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4" style="color: #d35400;">Sign Up!</legend>
+                                <div>
+                                    <p>
+                                        Already Have An Account? <a class="ml-2" href="{{ url_for('home') }}">Sign In</a>
+                                    </p>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.username.label(class="form-control-label") }}
+                                    {% if form.username.errors %}
+                                        {{ form.username(class="form-control form-control-lg is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.username.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.username(class="form-control form-control-lg") }}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.email.label(class="form-control-label") }}
+                                    {% if form.email.errors %}
+                                        {{ form.email(class="form-control form-control-lg is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.email.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.email(class="form-control form-control-lg") }}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.password.label(class="form-control-label") }}
+                                    {% if form.password.errors %}
+                                        {{ form.password(class="form-control form-control-lg is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.password.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.password(class="form-control form-control-lg") }}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.confirm_password.label(class="form-control-label") }}
+                                    {% if form.confirm_password.errors %}
+                                        {{ form.confirm_password(class="form-control form-control-lg is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.confirm_password.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.confirm_password(class="form-control form-control-lg") }}
+                                    {% endif %}
+                                </div>
+                                <div class="form-check">
+                                    {{ form.accept_tos(class="form-check-input") }}
+                                    {{ form.accept_tos.label(class="form-check-label") }}
+                                </div>
+                                <div>
+                                    <a href="">Terms of Service</a>
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+    
