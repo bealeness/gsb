@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/e64238ecf6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap">
+
+    {% if title %}
+        <title>GSB - {{ title }}</title>
+    {% else %}
+        <title>GSB</title>
+    {% endif %}
+</head>
+<body style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4f/Gisborne_NZ_Sunrise_Waikanae_Beach.jpg');
+              background-size: cover; font-family: 'Noto+Serif+SC', 'sans-serif';">
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="max-width: vw100; background-color: #d35400;">
+      <div class="container">
+        <a class="navbar-brand" style="font-family: 'Pacifico', 'sans-serif';" href="/">Gisborne Securities Bank</a>
+        
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="#"><b><i class="fas fa-sign-out-alt mr-1"></i>Logout</b></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+    <main role="main" class="container">
+      <div class="row">
+        <!--Sidebar-->
+        <div class="col-md-3" style="padding-top: 100px; padding-left: 30px;">
+          <div class="bg-light border-right" id="sidebar-wrapper" style="padding-block: 10px;">
+            <div class="sidebar-heading ml-3" style="font-size: 30px; color: #d35400;">Menu</div>
+            <div class="list-group list-group-flush">
+              <a href="{{ url_for('my_personal') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-wallet mr-1"></i>MyPersonal</a>
+              <a href="{{ url_for('pay_someone') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-hand-holding-usd mr-1"></i>PaySomeone</a>
+              <a href="{{ url_for('my_term')}}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-percent mr-1"></i>MyTerm</a>
+              <a href="{{ url_for('term_products') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-percent mr-1"></i>TermProducts</a>
+              <a href="{{ url_for('my_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>MyBond</a>
+              <a href="{{ url_for('buy_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: BUY</a>
+              <a href="{{ url_for('sell_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: SELL</a>
+              <a href="{{ url_for('bond_market') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: ANALYTICS</a>
+              <a href="{{ url_for('leaderboard')}}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-trophy mr-1"></i>Leaderboard</a>
+              <a href="{{ url_for('account_settings') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-cog mr-1"></i>AccountSettings</a>
+            </div>
+          </div>
+        </div>
+        <!--Page contents-->
+        <div class="col-md-9" style="padding-top: 100px; padding-left: 35px;">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          {% block content %}{% endblock %}
+        </div>
+        </div>
+      </div>
+    </main>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
