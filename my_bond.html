@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <h1 style="font-size: 30px; color: #d35400;">MyBond</h1>
+        <h3 class="text-muted">$100,450.00</h3>
+        <h5 class="text-muted">GSB 1 Month - Ref:23 - 35%</h5>
+        <h5 class="text-muted">GSB 2 Month - Ref:24 - 40%</h5>
+        <h5 class="text-muted">GSB 3 Month - Ref:25 - 45%</h5>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Note</th>
+      <th scope="col">Date</th>
+      <th scope="col">Change</th>
+      <th scope="col">Balance</th>
+      <th scope="col">Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td scope="row">Interest</td>
+      <td>23 July</td>
+      <td>20500.00</td>
+      <td>100450.00</td>
+      <td><a href="">Details</a></td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+{% endblock %}
