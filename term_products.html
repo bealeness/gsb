@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <h1 style="font-size: 30px; color: #d35400;">TermProducts</h1>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4" style="color: #d35400;">Choose a product:</legend>
+                <div class="form-group">
+                    {% for subfield in form.product %}
+                        <tr>
+                            <td>{{ subfield }}</td>
+                            <td>{{ subfield.label }}</td>
+                            <a style="padding: 90px;" href="">Details</a>
+                        </tr>
+                    {% endfor %}
+                </div>
+                <hr>
+                <div class="form-group">
+                    {{ form.amount.label(class="form-control-label") }}
+                    {% if form.amount.errors %}
+                        {{ form.amount(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.amount.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.amount(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-warning") }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
