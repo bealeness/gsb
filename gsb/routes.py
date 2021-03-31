@@ -1,19 +1,39 @@
 from gsb import app, db, bcrypt
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from gsb.forms import (RegistrationForm, LoginForm, PaySomeone, TermProducts, 
                     BuyBond, SellBond, UpdateAccountForm)
 from gsb.models import User, Transactions, Term, Bond
 from random import randint
+from flask_login import login_user, current_user, logout_user, login_required
 
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    if current_user.is_authenticated:
+        return redirect(url_for('my_personal'))
     form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('my_personal'))
+        else:
+            flash('Login unsuccessful. Please check email and password.', 'danger')
     return render_template("logged_out/gsb.html", title='Sign In', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'primary')
+    return redirect(url_for('home'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('my_personal'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -29,56 +49,66 @@ def register():
     return render_template("logged_out/register.html", title='Register', form=form)
 
 
-@app.route('/mypersonal', methods=['GET', 'POST'])
+@app.route('/mypersonal', methods=['GET'])
+@login_required
 def my_personal():
     return render_template('my_personal.html', title='MyPersonal')
 
 
 @app.route('/paysomeone', methods=['GET', 'POST'])
+@login_required
 def pay_someone():
     form = PaySomeone()
     return render_template('pay_someone.html', title='PaySomeone', form=form)
 
 
 @app.route('/myterm', methods=['GET'])
+@login_required
 def my_term():
     return render_template('my_term.html', title='MyTerm')
 
 
 @app.route('/termproducts', methods=['GET', 'POST'])
+@login_required
 def term_products():
     form = TermProducts()
     return render_template('term_products.html', title='TermProducts', form=form)
 
 
 @app.route('/mybond', methods=['GET'])
+@login_required
 def my_bond():
     return render_template('my_bond.html', title='MyBond')
 
 
 @app.route('/buybond', methods=['GET'])
+@login_required
 def buy_bond():
     form = BuyBond()
     return render_template('buy_bond.html', title='BuyBond', form=form)
 
 
 @app.route('/sellbond', methods=['GET'])
+@login_required
 def sell_bond():
     form = SellBond()
     return render_template('sell_bond.html', title='SellBond', form=form)
 
 
 @app.route('/bondmarket', methods=['GET'])
+@login_required
 def bond_market():
     return render_template('bond_market.html', title='BondMarket')
 
 
 @app.route('/leaderboard', methods=['GET'])
+@login_required
 def leaderboard():
     return render_template('leaderboard.html', title='Leaderboard')
 
 
 @app.route('/accountsettings', methods=['GET'])
+@login_required
 def account_settings():
     form = UpdateAccountForm()
     return render_template('account_settings.html', title='AccountSettings', form=form)
