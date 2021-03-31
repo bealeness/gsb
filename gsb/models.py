@@ -46,7 +46,6 @@ class User(db.Model):
     term = db.Column(db.Numeric(20, 2), nullable=False)
     bond = db.Column(db.Numeric(20, 2), nullable=False)
     total = db.Column(db.Numeric(20, 2), nullable=False)
-    
     terms = db.relationship('Term', secondary=terms, lazy='dynamic', backref=db.backref('owners', lazy=True))
     bonds = db.relationship('Bond', secondary=bonds, lazy='dynamic', backref=db.backref('owners', lazy=True))
     buys = db.relationship('Bond', secondary=buys, lazy='dynamic', backref=db.backref('buyers', lazy=True))
@@ -58,12 +57,16 @@ class User(db.Model):
 class Transactions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
     note = db.Column(db.String(30), nullable=True)
     amount = db.Column(db.Numeric(20, 2), nullable=False)
     t_trasaction = db.Column(db.Boolean, default=False, nullable=False)
     b_transaction = db.Column(db.Boolean, default=False, nullable=False)  
+
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
+
+    sender = db.relationship("User", foreign_keys=[sender_id])
+    receiver = db.relationship("User", foreign_keys=[receiver_id])
 
 
 class Term(db.Model):
