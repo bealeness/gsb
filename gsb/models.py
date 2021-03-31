@@ -37,6 +37,16 @@ sells = db.Table('sells',
     db.Column('offer', db.Numeric(6, 2), nullable=False)
     )
 
+transactions = db.Table('transactions',
+    db.Column('sender_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('reveiver_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('timestamp', db.DateTime, nullable=False, default=datetime.utcnow),
+    db.Column('note', db.String(30), nullable=True),
+    db.Column('amount', db.Numeric(20, 2), nullable=False),
+    db.Column('t_transaction', db.Boolean, default=False, nullable=False),
+    db.Column('b_transaction', db.Boolean, default=False, nullable=False)  
+    )
+
 
 
 class User(db.Model, UserMixin):
@@ -58,19 +68,6 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.total}')"
 
-class Transactions(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    note = db.Column(db.String(30), nullable=True)
-    amount = db.Column(db.Numeric(20, 2), nullable=False)
-    t_trasaction = db.Column(db.Boolean, default=False, nullable=False)
-    b_transaction = db.Column(db.Boolean, default=False, nullable=False)  
-
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
-
-    sender = db.relationship("User", foreign_keys=[sender_id])
-    receiver = db.relationship("User", foreign_keys=[receiver_id])
 
 
 class Term(db.Model):

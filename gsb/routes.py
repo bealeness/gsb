@@ -2,7 +2,7 @@ from gsb import app, db, bcrypt
 from flask import render_template, flash, redirect, url_for, request
 from gsb.forms import (RegistrationForm, LoginForm, PaySomeone, TermProducts, 
                     BuyBond, SellBond, UpdateAccountForm)
-from gsb.models import User, Transactions, Term, Bond
+from gsb.models import User, Term, Bond, transactions
 from random import randint
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -52,14 +52,29 @@ def register():
 @app.route('/mypersonal', methods=['GET'])
 @login_required
 def my_personal():
-    return render_template('my_personal.html', title='MyPersonal')
+    user = current_user.id
+    personal = User.query.filter_by(id=user).first_or_404()
+    return render_template('my_personal.html', title='MyPersonal', personal=personal, user=user)
 
 
 @app.route('/paysomeone', methods=['GET', 'POST'])
 @login_required
 def pay_someone():
+    user = current_user.id
+    personal = User.query.filter_by(id=user).first_or_404()
     form = PaySomeone()
-    return render_template('pay_someone.html', title='PaySomeone', form=form)
+    if form.validate_on_submit():
+        receiver = User.query.filter_by(account=form.receiver.data).first()
+        if receiver.cash < form.amount.data:
+            flash('You do not have enough funds for this payment. Enter another amount.', 'danger')
+            return redirect(url_for('pay_someone'))
+        current_user.cash=current_user.cash-form.amount.data
+        receiver.cash=receiver.cash+form.amount.data
+        #You have to make the transactions work
+        db.session.commit()
+        flash('Your payment has been sent!', 'primary')
+        return redirect(url_for('my_personal'))
+    return render_template('pay_someone.html', title='PaySomeone', form=form, user=user, personal=personal)
 
 
 @app.route('/myterm', methods=['GET'])

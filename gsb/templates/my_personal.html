@@ -2,10 +2,11 @@
 {% block content %}
   <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
       <h1 style="font-size: 30px; color: #d35400;">MyPersonal</h1>
-      <h3 class="text-muted">$859.50</h3>
-      <h5 class="text-muted">583-1209</h5>
+      <h3 class="text-muted">Balance: ${{ personal.cash }}</h3>
+      <h5 class="text-muted">Account#: {{ personal.account }}</h5>
   </div>
   <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <h3 class="text-muted">Sent money</h3>
       <table class="table">
         <thead>
           <tr>
@@ -24,60 +25,27 @@
             <td>859.50</td>
             <td><a href="">Details</a></td>
           </tr>
+        </tbody>
+      </table>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <h3 class="text-muted">Received money</h3>
+      <table class="table">
+        <thead>
           <tr>
-            <td scope="row">233-6784</td>
-            <td>20 July</td>
-            <td>-20.00</td>
-            <td>879.50</td>
-            <td><a href="">Details</a></td>
+            <th scope="col">Account</th>
+            <th scope="col">Date</th>
+            <th scope="col">Change</th>
+            <th scope="col">Balance</th>
+            <th scope="col">Details</th>
           </tr>
+        </thead>
+        <tbody>
           <tr>
             <td scope="row">233-6784</td>
-            <td>20 July</td>
+            <td>23 July</td>
             <td>-20.00</td>
-            <td>879.50</td>
-            <td><a href="">Details</a></td>
-          </tr>
-          <tr>
-            <td scope="row">233-6784</td>
-            <td>20 July</td>
-            <td>-20.00</td>
-            <td>879.50</td>
-            <td><a href="">Details</a></td>
-          </tr>
-          <tr>
-            <td scope="row">233-6784</td>
-            <td>20 July</td>
-            <td>-20.00</td>
-            <td>879.50</td>
-            <td><a href="">Details</a></td>
-          </tr>
-          <tr>
-            <td scope="row">233-6784</td>
-            <td>20 July</td>
-            <td>-20.00</td>
-            <td>879.50</td>
-            <td><a href="">Details</a></td>
-          </tr>
-          <tr>
-            <td scope="row">233-6784</td>
-            <td>20 July</td>
-            <td>-20.00</td>
-            <td>879.50</td>
-            <td><a href="">Details</a></td>
-          </tr>
-          <tr>
-            <td scope="row">233-6784</td>
-            <td>20 July</td>
-            <td>-20.00</td>
-            <td>879.50</td>
-            <td><a href="">Details</a></td>
-          </tr>
-          <tr>
-            <td scope="row">233-6784</td>
-            <td>20 July</td>
-            <td>-20.00</td>
-            <td>879.50</td>
+            <td>859.50</td>
             <td><a href="">Details</a></td>
           </tr>
         </tbody>
