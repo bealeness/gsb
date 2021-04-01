@@ -2,7 +2,7 @@ from gsb import app, db, bcrypt
 from flask import render_template, flash, redirect, url_for, request
 from gsb.forms import (RegistrationForm, LoginForm, PaySomeone, TermProducts, 
                     BuyBond, SellBond, UpdateAccountForm, CreateTermProduct)
-from gsb.models import User, Term, Bond, Transactions
+from gsb.models import User, Term, Bond, Receives, Sends
 from random import randint
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -54,8 +54,9 @@ def register():
 def my_personal():
     user = current_user.id
     personal = User.query.filter_by(id=user).first_or_404()
-    transactions = Transactions.query.filter_by(receiver_id=user).order_by(Transactions.timestamp.desc()).all()
-    return render_template('my_personal.html', title='MyPersonal', personal=personal, user=user, transactions=transactions)
+    receives = Receives.query.filter_by(receiver_id=user).order_by(Receives.timestamp.desc()).all()
+    sends = Sends.query.filter_by(sender_id=user).order_by(Sends.timestamp.desc()).all()
+    return render_template('my_personal.html', title='MyPersonal', personal=personal, user=user, receives=receives, sends=sends)
 
 
 @app.route('/paysomeone', methods=['GET', 'POST'])
@@ -71,10 +72,14 @@ def pay_someone():
             return redirect(url_for('pay_someone'))
         current_user.cash=current_user.cash-form.amount.data
         receiver.cash=receiver.cash+form.amount.data
-        transacts = Transactions(receiver_id=receiver.id, note=form.note.data,
+        receives = Receives(receiver_id=receiver.id, note=form.note.data,
                                     amount=form.amount.data, sender=current_user.account,
                                     balance=receiver.cash)
-        db.session.add(transacts)
+        sends = Sends(sender_id=user, note=form.note.data,
+                                    amount=form.amount.data, receiver=receiver.account,
+                                    balance=current_user.cash)
+        db.session.add(receives)
+        db.session.add(sends)
         db.session.commit()
         flash('Your payment has been sent!', 'primary')
         return redirect(url_for('my_personal'))

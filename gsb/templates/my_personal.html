@@ -6,7 +6,7 @@
       <h5 class="text-muted">Account#: {{ personal.account }}</h5>
   </div>
   <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
-    <h3 class="text-muted">Transactions</h3>
+    <h3 class="text-muted">Funds Received</h3>
       <table class="table">
         <thead>
           <tr>
@@ -16,14 +16,39 @@
             <th scope="col">Balance</th>
             <th scope="col">Details</th>
           </tr>
-        {% for transaction in transactions %}
+        {% for receive in receives %}
         </thead>
         <tbody>
           <tr>
-            <td scope="row">{{ transaction.sender }}</td>
-            <td>{{ transaction.timestamp.strftime('%Y-%m-%d-%H-%M') }}</td>
-            <td>{{ transaction.amount }}</td>
-            <td>{{ transaction.balance }}</td>
+            <td scope="row">{{ receive.sender }}</td>
+            <td>{{ receive.timestamp.strftime('%Y-%m-%d-%H-%M') }}</td>
+            <td>{{ receive.amount }}</td>
+            <td>{{ receive.balance }}</td>
+            <td><a href="">Details</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <h3 class="text-muted">Funds Sent</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Account</th>
+            <th scope="col">DateTime</th>
+            <th scope="col">Change</th>
+            <th scope="col">Balance</th>
+            <th scope="col">Details</th>
+          </tr>
+        {% for send in sends %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ send.receiver }}</td>
+            <td>{{ send.timestamp.strftime('%Y-%m-%d-%H-%M') }}</td>
+            <td>{{ send.amount }}</td>
+            <td>{{ send.balance }}</td>
             <td><a href="">Details</a></td>
           </tr>
         {% endfor %}

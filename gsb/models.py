@@ -55,7 +55,8 @@ class User(db.Model, UserMixin):
     bonds = db.relationship('Bond', secondary=bonds, lazy='dynamic', backref=db.backref('owners', lazy=True))
     buys = db.relationship('Bond', secondary=buys, lazy='dynamic', backref=db.backref('buyers', lazy=True))
     sells = db.relationship('Bond', secondary=sells, lazy='dynamic', backref=db.backref('sellers', lazy=True))
-    receives = db.relationship('Transactions', lazy='dynamic', backref='receiver')
+    receives = db.relationship('Receives', lazy='dynamic', backref='receiver')
+    sends = db.relationship('Sends', lazy='dynamic', backref='sender')
 
     
     def __repr__(self):
@@ -63,7 +64,7 @@ class User(db.Model, UserMixin):
 
 
 
-class Transactions(db.Model):
+class Receives(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     note = db.Column(db.String(30), nullable=True)
@@ -73,6 +74,18 @@ class Transactions(db.Model):
     sender = db.Column(db.Integer, nullable=False)
     balance = db.Column(db.Numeric(20,2), nullable=False)
     receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
+
+class Sends(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    note = db.Column(db.String(30), nullable=True)
+    amount = db.Column(db.Numeric(20, 2), nullable=False)
+    t_transaction = db.Column(db.Boolean, default=False, nullable=False)
+    b_transaction = db.Column(db.Boolean, default=False, nullable=False)
+    receiver = db.Column(db.Integer, nullable=False)
+    balance = db.Column(db.Numeric(20,2), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     
     
 
