@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from gsb.models import User
 from wtforms import (StringField, PasswordField, SubmitField, BooleanField, 
-                        IntegerField, DecimalField, RadioField)
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+                        IntegerField, DecimalField, RadioField, SelectField)
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), 
@@ -38,15 +38,20 @@ class LoginForm(FlaskForm):
 class PaySomeone(FlaskForm):
     receiver = IntegerField('Enter the receivers account number:', validators=[DataRequired()])
     amount = DecimalField('Enter the amount:', validators=[DataRequired()], places=2)
-    note = StringField('Write a short note (optional):')
+    note = StringField('Write a short note (optional):', validators=[Optional(), Length(min=1, max=30)])
     submit = SubmitField('Send')
 
 
 
 class TermProducts(FlaskForm):
-    product = RadioField('Choose a Term Product', choices=[('value1', 'The GSB Daily'), ('value2', 'The GSB Double Daily')], validators=[DataRequired()])
-    amount = DecimalField('Enter the amount you want in this term:', validators=[DataRequired()], places=2)
+    amount = DecimalField('Enter the amount you wish to deposit:', validators=[DataRequired()], places=2)
     submit = SubmitField('Deposit')
+
+class CreateTermProduct(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    maturity = IntegerField('Maturity', validators=[DataRequired()])
+    rate = DecimalField('Rate', validators=[DataRequired()], places=2)
+    submit = SubmitField('Create')
 
 
 class BuyBond(FlaskForm):

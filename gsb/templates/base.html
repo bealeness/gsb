@@ -34,9 +34,10 @@
     <main role="main" class="container">
       <div class="row">
         <!--Sidebar-->
-        <div class="col-md-3" style="padding-top: 100px; padding-left: 30px;">
+        <div class="col-md-3" style="padding-top: 100px; padding-left: 30px; padding-bottom: 30px;">
           <div class="bg-light border-right" id="sidebar-wrapper" style="padding-block: 10px;">
-            <div class="sidebar-heading ml-3" style="font-size: 30px; color: #d35400;">Menu</div>
+            <div class="sidebar-heading ml-3 text-muted" style="font-size: 30px;">Kia Ora {{ current_user.username }}!</div>
+            <div class="sidebar-heading ml-3" style="font-size: 20px; color: #d35400;">Menu</div>
             <div class="list-group list-group-flush">
               <a href="{{ url_for('my_personal') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-wallet mr-1"></i>MyPersonal</a>
               <a href="{{ url_for('pay_someone') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-hand-holding-usd mr-1"></i>PaySomeone</a>

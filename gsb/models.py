@@ -37,16 +37,6 @@ sells = db.Table('sells',
     db.Column('offer', db.Numeric(6, 2), nullable=False)
     )
 
-transactions = db.Table('transactions',
-    db.Column('sender_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('reveiver_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('timestamp', db.DateTime, nullable=False, default=datetime.utcnow),
-    db.Column('note', db.String(30), nullable=True),
-    db.Column('amount', db.Numeric(20, 2), nullable=False),
-    db.Column('t_transaction', db.Boolean, default=False, nullable=False),
-    db.Column('b_transaction', db.Boolean, default=False, nullable=False)  
-    )
-
 
 
 class User(db.Model, UserMixin):
@@ -57,6 +47,7 @@ class User(db.Model, UserMixin):
     account = db.Column(db.BigInteger, unique=True, nullable=False)
     cash = db.Column(db.Numeric(20, 2), nullable=False)
     admin =  db.Column(db.Boolean, default=False, nullable=False)
+    image = db.Column(db.Integer, default=1, nullable=False)
     term = db.Column(db.Numeric(20, 2), nullable=False)
     bond = db.Column(db.Numeric(20, 2), nullable=False)
     total = db.Column(db.Numeric(20, 2), nullable=False)
@@ -64,9 +55,26 @@ class User(db.Model, UserMixin):
     bonds = db.relationship('Bond', secondary=bonds, lazy='dynamic', backref=db.backref('owners', lazy=True))
     buys = db.relationship('Bond', secondary=buys, lazy='dynamic', backref=db.backref('buyers', lazy=True))
     sells = db.relationship('Bond', secondary=sells, lazy='dynamic', backref=db.backref('sellers', lazy=True))
+    receives = db.relationship('Transactions', lazy='dynamic', backref='receiver')
 
+    
     def __repr__(self):
-        return f"User('{self.username}', '{self.total}')"
+        return f"User('{self.username}', '{self.cash}')"
+
+
+
+class Transactions(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    note = db.Column(db.String(30), nullable=True)
+    amount = db.Column(db.Numeric(20, 2), nullable=False)
+    t_transaction = db.Column(db.Boolean, default=False, nullable=False)
+    b_transaction = db.Column(db.Boolean, default=False, nullable=False)
+    sender = db.Column(db.Integer, nullable=False)
+    balance = db.Column(db.Numeric(20,2), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    
+    
 
 
 

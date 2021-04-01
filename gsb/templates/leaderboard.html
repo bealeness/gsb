@@ -2,39 +2,30 @@
 {% block content %}
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <h1 style="font-size: 30px; color: #d35400;">Leaderboard</h1>
-        <h3 class="text-muted">Monday 23 July, 2021</h3>
+        <h3 class="text-muted"><span id="datetime"></span></h3>
     </div>
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <table class="table">
   <thead>
     <tr>
-      <th scope="col">Place</th>
       <th scope="col">Name</th>
-      <th scope="col">Balance</th>
+      <th scope="col">Total</th>
     </tr>
+  {% for user in users %}
   </thead>
   <tbody>
     <tr>
-      <td scope="row">1</td>
-      <td>basic_fred</td>
-      <td>254900.00</td>
-    </tr>
-    <tr>
-      <td scope="row">2</td>
-      <td>Judy_S</td>
-      <td>234905.00</td>
-    </tr>
-    <tr>
-      <td scope="row">3</td>
-      <td>Ballz_Dilla</td>
-      <td>123784.00</td>
-    </tr>
-    <tr>
-      <td scope="row">4</td>
-      <td>the_g_hustle</td>
-      <td>90356.00</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.cash }}</td>
+  {% endfor %}
     </tr>
   </tbody>
 </table>
     </div>
+
+<!--JavaScript live date script-->
+<script>
+var dt = new Date();
+document.getElementById("datetime").innerHTML = (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (("0"+dt.getDate()).slice(-2)) +"/"+ (dt.getFullYear());
+</script>
 {% endblock %}

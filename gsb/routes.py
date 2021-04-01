@@ -1,8 +1,8 @@
 from gsb import app, db, bcrypt
 from flask import render_template, flash, redirect, url_for, request
 from gsb.forms import (RegistrationForm, LoginForm, PaySomeone, TermProducts, 
-                    BuyBond, SellBond, UpdateAccountForm)
-from gsb.models import User, Term, Bond, transactions
+                    BuyBond, SellBond, UpdateAccountForm, CreateTermProduct)
+from gsb.models import User, Term, Bond, Transactions
 from random import randint
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -54,7 +54,8 @@ def register():
 def my_personal():
     user = current_user.id
     personal = User.query.filter_by(id=user).first_or_404()
-    return render_template('my_personal.html', title='MyPersonal', personal=personal, user=user)
+    transactions = Transactions.query.filter_by(receiver_id=user).order_by(Transactions.timestamp.desc()).all()
+    return render_template('my_personal.html', title='MyPersonal', personal=personal, user=user, transactions=transactions)
 
 
 @app.route('/paysomeone', methods=['GET', 'POST'])
@@ -65,12 +66,15 @@ def pay_someone():
     form = PaySomeone()
     if form.validate_on_submit():
         receiver = User.query.filter_by(account=form.receiver.data).first()
-        if receiver.cash < form.amount.data:
+        if current_user.cash < form.amount.data:
             flash('You do not have enough funds for this payment. Enter another amount.', 'danger')
             return redirect(url_for('pay_someone'))
         current_user.cash=current_user.cash-form.amount.data
         receiver.cash=receiver.cash+form.amount.data
-        #You have to make the transactions work
+        transacts = Transactions(receiver_id=receiver.id, note=form.note.data,
+                                    amount=form.amount.data, sender=current_user.account,
+                                    balance=receiver.cash)
+        db.session.add(transacts)
         db.session.commit()
         flash('Your payment has been sent!', 'primary')
         return redirect(url_for('my_personal'))
@@ -80,13 +84,33 @@ def pay_someone():
 @app.route('/myterm', methods=['GET'])
 @login_required
 def my_term():
-    return render_template('my_term.html', title='MyTerm')
+    user = current_user.id
+    personal = User.query.filter_by(id=user).first_or_404()
+    return render_template('my_term.html', title='MyTerm', personal=personal)
+
+
+@app.route('/adminterm', methods=['GET', 'POST'])
+@login_required
+def admin_term():
+    form = CreateTermProduct()
+    if form.validate_on_submit():
+        terms = Term(name=form.name.data, maturity=form.maturity.data, rate=form.rate.data)
+        db.session.add(terms)
+        db.session.commit()
+    return render_template('adminterm.html', title='AdminTerm', form=form)
 
 
 @app.route('/termproducts', methods=['GET', 'POST'])
 @login_required
 def term_products():
     form = TermProducts()
+    if form.validate_on_submit():
+        current_user.cash=current_user.cash-form.amount.data
+        current_user.term=current_user.term+form.amount.data
+        current_user.total=current_user.cash+current_user.term
+        db.session.commit()
+        flash('Your cash has been deposited', 'primary')
+        return redirect(url_for('term_products'))
     return render_template('term_products.html', title='TermProducts', form=form)
 
 
@@ -116,15 +140,27 @@ def bond_market():
     return render_template('bond_market.html', title='BondMarket')
 
 
-@app.route('/leaderboard', methods=['GET'])
+@app.route('/leaderboard', methods=['GET', 'POST'])
 @login_required
 def leaderboard():
-    return render_template('leaderboard.html', title='Leaderboard')
+    users = User.query.order_by(User.cash.desc()).all()
+    return render_template('leaderboard.html', title='Leaderboard', users=users)
 
 
-@app.route('/accountsettings', methods=['GET'])
+@app.route('/accountsettings', methods=['GET', 'POST'])
 @login_required
 def account_settings():
+    user = current_user.id
+    personal = User.query.filter_by(id=user).first_or_404()
     form = UpdateAccountForm()
-    return render_template('account_settings.html', title='AccountSettings', form=form)
+    if form.validate_on_submit():
+        current_user.username=form.username.data
+        current_user.email=form.email.data
+        db.session.commit()
+        flash('Your account has been updated!', 'primary')
+        return redirect(url_for('account_settings'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    return render_template('account_settings.html', title='AccountSettings', form=form, personal=personal)
 

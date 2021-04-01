@@ -6,48 +6,27 @@
       <h5 class="text-muted">Account#: {{ personal.account }}</h5>
   </div>
   <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
-    <h3 class="text-muted">Sent money</h3>
+    <h3 class="text-muted">Transactions</h3>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">Account</th>
-            <th scope="col">Date</th>
+            <th scope="col">DateTime</th>
             <th scope="col">Change</th>
             <th scope="col">Balance</th>
             <th scope="col">Details</th>
           </tr>
+        {% for transaction in transactions %}
         </thead>
         <tbody>
           <tr>
-            <td scope="row">233-6784</td>
-            <td>23 July</td>
-            <td>-20.00</td>
-            <td>859.50</td>
+            <td scope="row">{{ transaction.sender }}</td>
+            <td>{{ transaction.timestamp.strftime('%Y-%m-%d-%H-%M') }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.balance }}</td>
             <td><a href="">Details</a></td>
           </tr>
-        </tbody>
-      </table>
-  </div>
-  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
-    <h3 class="text-muted">Received money</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Account</th>
-            <th scope="col">Date</th>
-            <th scope="col">Change</th>
-            <th scope="col">Balance</th>
-            <th scope="col">Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td scope="row">233-6784</td>
-            <td>23 July</td>
-            <td>-20.00</td>
-            <td>859.50</td>
-            <td><a href="">Details</a></td>
-          </tr>
+        {% endfor %}
         </tbody>
       </table>
   </div>

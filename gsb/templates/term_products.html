@@ -7,17 +7,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4" style="color: #d35400;">Choose a product:</legend>
-                <div class="form-group">
-                    {% for subfield in form.product %}
-                        <tr>
-                            <td>{{ subfield }}</td>
-                            <td>{{ subfield.label }}</td>
-                            <a style="padding: 90px;" href="">Details</a>
-                        </tr>
-                    {% endfor %}
-                </div>
-                <hr>
+                <legend class="border-bottom mb-4" style="color: #d35400;">Make a deposit:</legend>
                 <div class="form-group">
                     {{ form.amount.label(class="form-control-label") }}
                     {% if form.amount.errors %}
