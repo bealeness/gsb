@@ -21,7 +21,7 @@
         <tbody>
           <tr>
             <td scope="row">{{ receive.sender }}</td>
-            <td>{{ receive.timestamp.strftime('%Y-%m-%d-%H-%M') }}</td>
+            <td>{{ receive.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
             <td>{{ receive.amount }}</td>
             <td>{{ receive.balance }}</td>
             <td><a href="">Details</a></td>
@@ -46,7 +46,7 @@
         <tbody>
           <tr>
             <td scope="row">{{ send.receiver }}</td>
-            <td>{{ send.timestamp.strftime('%Y-%m-%d-%H-%M') }}</td>
+            <td>{{ send.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
             <td>{{ send.amount }}</td>
             <td>{{ send.balance }}</td>
             <td><a href="">Details</a></td>

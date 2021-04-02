@@ -53,4 +53,25 @@
             </div>
         </form>
     </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <h3 class="text-muted">Terms in stock</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Maturity</th>
+            <th scope="col">Rate</th>
+          </tr>
+        {% for term in stock %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ term.name }}</td>
+            <td>{{ term.maturity }}</td>
+            <td>{{ term.rate }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
 {% endblock %}

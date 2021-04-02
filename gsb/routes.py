@@ -1,7 +1,8 @@
 from gsb import app, db, bcrypt
 from flask import render_template, flash, redirect, url_for, request
 from gsb.forms import (RegistrationForm, LoginForm, PaySomeone, TermProducts, 
-                    BuyBond, SellBond, UpdateAccountForm, CreateTermProduct)
+                    BuyBond, SellBond, UpdateAccountForm, CreateTermProduct, CreateBond,
+                    WithdrawTerm)
 from gsb.models import User, Term, Bond, Receives, Sends
 from random import randint
 from flask_login import login_user, current_user, logout_user, login_required
@@ -54,8 +55,11 @@ def register():
 def my_personal():
     user = current_user.id
     personal = User.query.filter_by(id=user).first_or_404()
-    receives = Receives.query.filter_by(receiver_id=user).order_by(Receives.timestamp.desc()).all()
-    sends = Sends.query.filter_by(sender_id=user).order_by(Sends.timestamp.desc()).all()
+    receives = Receives.query.filter_by(receiver_id=user, t_transaction=False, b_transaction=False).order_by(Receives.timestamp.desc()).all()
+    sends = Sends.query.filter_by(sender_id=user, t_transaction=False, b_transaction=False).order_by(Sends.timestamp.desc()).all()
+    if current_user.admin == True:
+        receives = Receives.query.order_by(Receives.timestamp.desc()).all()
+        sends = Sends.query.order_by(Sends.timestamp.desc()).all()
     return render_template('my_personal.html', title='MyPersonal', personal=personal, user=user, receives=receives, sends=sends)
 
 
@@ -71,7 +75,9 @@ def pay_someone():
             flash('You do not have enough funds for this payment. Enter another amount.', 'danger')
             return redirect(url_for('pay_someone'))
         current_user.cash=current_user.cash-form.amount.data
+        current_user.total=current_user.total-form.amount.data
         receiver.cash=receiver.cash+form.amount.data
+        receiver.total=receiver.total+form.amount.data
         receives = Receives(receiver_id=receiver.id, note=form.note.data,
                                     amount=form.amount.data, sender=current_user.account,
                                     balance=receiver.cash)
@@ -86,12 +92,33 @@ def pay_someone():
     return render_template('pay_someone.html', title='PaySomeone', form=form, user=user, personal=personal)
 
 
-@app.route('/myterm', methods=['GET'])
+@app.route('/myterm', methods=['GET', 'POST'])
 @login_required
 def my_term():
     user = current_user.id
     personal = User.query.filter_by(id=user).first_or_404()
-    return render_template('my_term.html', title='MyTerm', personal=personal)
+    form = WithdrawTerm()
+    if form.validate_on_submit():
+        if current_user.term < form.amount.data:
+            flash('You do not have that amount in term. Enter another amount.', 'danger')
+            return redirect(url_for('term_products'))
+        current_user.cash=current_user.cash+form.amount.data
+        current_user.term=current_user.term-form.amount.data
+        current_user.total=current_user.cash+current_user.term
+        #show up in MyTerm
+        receives = Receives(amount=form.amount.data, t_transaction=True, receiver_id=current_user.id, 
+                        balance=current_user.term, sender=1000010000)
+        #show up in MyPersonal
+        receive = Receives(amount=form.amount.data, t_transaction=False, receiver_id=current_user.id,
+                        balance=current_user.cash, sender=1000010000)
+        db.session.add(receives)
+        db.session.add(receive)
+        db.session.commit()
+        flash('Your withdrawal was successful', 'primary')
+        return redirect(url_for('my_term'))
+    sends = Sends.query.filter_by(sender_id=user, t_transaction=True).order_by(Sends.timestamp.desc()).all()
+    receives = Receives.query.filter_by(receiver_id=user, t_transaction=True).order_by(Receives.timestamp.desc()).all()
+    return render_template('my_term.html', title='MyTerm', personal=personal, sends=sends, form=form, receives=receives)
 
 
 @app.route('/adminterm', methods=['GET', 'POST'])
@@ -102,7 +129,9 @@ def admin_term():
         terms = Term(name=form.name.data, maturity=form.maturity.data, rate=form.rate.data)
         db.session.add(terms)
         db.session.commit()
-    return render_template('adminterm.html', title='AdminTerm', form=form)
+        flash('Term created', 'primary')
+    stock = Term.query.order_by(Term.id).all()
+    return render_template('admin/adminterm.html', title='AdminTerm', form=form, stock=stock)
 
 
 @app.route('/termproducts', methods=['GET', 'POST'])
@@ -110,19 +139,33 @@ def admin_term():
 def term_products():
     form = TermProducts()
     if form.validate_on_submit():
+        if current_user.cash < form.amount.data:
+            flash('You do not have enough funds for this deposit. Enter another amount.', 'danger')
+            return redirect(url_for('term_products'))
         current_user.cash=current_user.cash-form.amount.data
         current_user.term=current_user.term+form.amount.data
         current_user.total=current_user.cash+current_user.term
+        #show up in MyTerm
+        sends = Sends(amount=form.amount.data, t_transaction=True, receiver=1000010000, 
+                        balance=current_user.term, sender_id=current_user.id)
+        #show up in MyPersonal
+        send = Sends(amount=form.amount.data, t_transaction=False, receiver=1000010000,
+                        balance=current_user.cash, sender_id=current_user.id)
+        db.session.add(sends)
+        db.session.add(send)
         db.session.commit()
         flash('Your cash has been deposited', 'primary')
         return redirect(url_for('term_products'))
-    return render_template('term_products.html', title='TermProducts', form=form)
+    stock = Term.query.order_by(Term.id).all()
+    return render_template('term_products.html', title='TermProducts', form=form, stock=stock)
 
 
 @app.route('/mybond', methods=['GET'])
 @login_required
 def my_bond():
-    return render_template('my_bond.html', title='MyBond')
+    user = current_user.id
+    personal = User.query.filter_by(id=user).first_or_404()
+    return render_template('my_bond.html', title='MyBond', personal=personal)
 
 
 @app.route('/buybond', methods=['GET'])
@@ -142,13 +185,28 @@ def sell_bond():
 @app.route('/bondmarket', methods=['GET'])
 @login_required
 def bond_market():
-    return render_template('bond_market.html', title='BondMarket')
+    stock = Bond.query.order_by(Bond.id).all()
+    return render_template('bond_market.html', title='BondMarket', stock=stock)
 
+
+@app.route('/adminbond', methods=['GET', 'POST'])
+@login_required
+def admin_bond():
+    form = CreateBond()
+    if form.validate_on_submit():
+        bonds = Bond(name=form.name.data, ref_num=form.ref_num.data, maturity=form.maturity.data,
+                rate= form.rate.data, face_value=form.face_value.data, quantity=form.quantity.data)
+        db.session.add(bonds)
+        db.session.commit()
+        flash('Bond created', 'primary')
+        return redirect(url_for('admin_bond'))
+    stock = Bond.query.order_by(Bond.id).all()
+    return render_template('admin/adminbond.html', title='AdminBond', form=form, stock=stock)
 
 @app.route('/leaderboard', methods=['GET', 'POST'])
 @login_required
 def leaderboard():
-    users = User.query.order_by(User.cash.desc()).all()
+    users = User.query.filter_by(admin=False).order_by(User.cash.desc()).all()
     return render_template('leaderboard.html', title='Leaderboard', users=users, count=1)
 
 

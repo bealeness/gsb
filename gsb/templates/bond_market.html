@@ -2,8 +2,7 @@
 {% block content %}
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <h1 style="font-size: 30px; color: #d35400;">BondMarket: ANALYTICS</h1>
-        <h3 class="text-muted">Monday 23 July, 2021</h3>
-        <h5 class="text-muted">13:09</h5>
+        <h3 class="text-muted">Date: <span id="datetime"></span></h3>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -20,81 +19,33 @@
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <table class="table">
             <thead>
-                <tr>
-                <th scope="col">Account</th>
-                <th scope="col">Date</th>
-                <th scope="col">Change</th>
-                <th scope="col">Balance</th>
-                <th scope="col">Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>23 July</td>
-                <td>-20.00</td>
-                <td>859.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>20 July</td>
-                <td>-20.00</td>
-                <td>879.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>20 July</td>
-                <td>-20.00</td>
-                <td>879.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>20 July</td>
-                <td>-20.00</td>
-                <td>879.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>20 July</td>
-                <td>-20.00</td>
-                <td>879.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>20 July</td>
-                <td>-20.00</td>
-                <td>879.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>20 July</td>
-                <td>-20.00</td>
-                <td>879.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>20 July</td>
-                <td>-20.00</td>
-                <td>879.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-                <tr>
-                <td scope="row">233-6784</td>
-                <td>20 July</td>
-                <td>-20.00</td>
-                <td>879.50</td>
-                <td><a href="">Details</a></td>
-                </tr>
-            </tbody>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">RefNum</th>
+            <th scope="col">Maturity</th>
+            <th scope="col">Rate</th>
+            <th scope="col">FaceValue</th>
+            <th scope="col">Quantity</th>
+          </tr>
+        {% for bond in stock %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ bond.name }}</td>
+            <td>{{ bond.ref_num }}</td>
+            <td>{{ bond.maturity }}</td>
+            <td>{{ bond.rate }}</td>
+            <td>{{ bond.face_value }}</td>
+            <td>{{ bond.quantity }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
         </table>
     </div>
 
-    
+<!--JavaScript live date script-->
+<script>
+var dt = new Date();
+document.getElementById("datetime").innerHTML = ( (("0"+dt.getDate()).slice(-2))+" "+ ("0"+(dt.getMonth()+1)).slice(-2)) +" "+ (dt.getFullYear());
+</script>
 {% endblock %}

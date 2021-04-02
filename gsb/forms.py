@@ -47,11 +47,16 @@ class TermProducts(FlaskForm):
     amount = DecimalField('Enter the amount you wish to deposit:', validators=[DataRequired()], places=2)
     submit = SubmitField('Deposit')
 
+class WithdrawTerm(FlaskForm):
+    amount = DecimalField('Enter the amount you wish to withdraw:', validators=[DataRequired()], places=2)
+    submit = SubmitField('Withdraw')
+
+#/adminterm
 class CreateTermProduct(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    maturity = IntegerField('Maturity', validators=[DataRequired()])
-    rate = DecimalField('Rate', validators=[DataRequired()], places=2)
-    submit = SubmitField('Create')
+    name = StringField('Name:', validators=[DataRequired()])
+    maturity = IntegerField('Maturity:', validators=[DataRequired()])
+    rate = DecimalField('Rate:', validators=[DataRequired()], places=2)
+    submit = SubmitField('CreateTerm')
 
 
 class BuyBond(FlaskForm):
@@ -67,6 +72,15 @@ class SellBond(FlaskForm):
     quantity = IntegerField('Quantity:', validators=[DataRequired()])
     submit = SubmitField('Offer')
 
+#/adminbond
+class CreateBond(FlaskForm):
+    name = StringField('Name:', validators=[DataRequired()])
+    ref_num = IntegerField('Ref num:', validators=[DataRequired()])
+    maturity = IntegerField('Maturity:', validators=[DataRequired()])
+    rate = DecimalField('Rate:', validators=[DataRequired()], places=2)
+    face_value = DecimalField('Face:', validators=[DataRequired()], places=2)
+    quantity = IntegerField('Quantity:', validators=[DataRequired()])
+    submit = SubmitField('CreateBond')
 
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), 
