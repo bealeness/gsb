@@ -2,12 +2,13 @@
 {% block content %}
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <h1 style="font-size: 30px; color: #d35400;">Leaderboard</h1>
-        <h3 class="text-muted"><span id="datetime"></span></h3>
+        <h3 class="text-muted">Date: <span id="datetime"></span></h3>
     </div>
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <table class="table">
   <thead>
     <tr>
+      <th scope="col">Place</th>
       <th scope="col">Name</th>
       <th scope="col">Total</th>
     </tr>
@@ -15,6 +16,7 @@
   </thead>
   <tbody>
     <tr>
+      <td>{{ count }}</td>
       <td>{{ user.username }}</td>
       <td>{{ user.cash }}</td>
   {% endfor %}
@@ -26,6 +28,6 @@
 <!--JavaScript live date script-->
 <script>
 var dt = new Date();
-document.getElementById("datetime").innerHTML = (("0"+(dt.getMonth()+1)).slice(-2)) +"/"+ (("0"+dt.getDate()).slice(-2)) +"/"+ (dt.getFullYear());
+document.getElementById("datetime").innerHTML = ( (("0"+dt.getDate()).slice(-2))+" "+ ("0"+(dt.getMonth()+1)).slice(-2)) +" "+ (dt.getFullYear());
 </script>
 {% endblock %}

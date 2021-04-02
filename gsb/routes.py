@@ -149,7 +149,7 @@ def bond_market():
 @login_required
 def leaderboard():
     users = User.query.order_by(User.cash.desc()).all()
-    return render_template('leaderboard.html', title='Leaderboard', users=users)
+    return render_template('leaderboard.html', title='Leaderboard', users=users, count=1)
 
 
 @app.route('/accountsettings', methods=['GET', 'POST'])
