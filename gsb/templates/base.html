@@ -33,7 +33,7 @@
         <a class="navbar-brand" style="font-family: 'Pacifico', 'sans-serif';" href="/">Gisborne Securities Bank</a>
         
           <div class="navbar-nav">
-            <a class="nav-item nav-link" href="{{ url_for('logout') }}"><b><i class="fas fa-sign-out-alt mr-1"></i>Logout</b></a>
+            <a class="nav-item nav-link" href="{{ url_for('main.logout') }}"><b><i class="fas fa-sign-out-alt mr-1"></i>Logout</b></a>
           </div>
         </div>
       </div>
@@ -48,19 +48,19 @@
             <div class="sidebar-heading ml-3" style="font-size: 20px; color: #d35400;">Menu</div>
             <div class="list-group list-group-flush">
             {% if current_user.admin == True %}
-              <a href="{{ url_for('admin_term') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminTerm</a>
-              <a href="{{ url_for('admin_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminBond</a>
+              <a href="{{ url_for('admin.admin_term') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminTerm</a>
+              <a href="{{ url_for('admin.admin_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminBond</a>
             {% endif %}
-              <a href="{{ url_for('my_personal') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-wallet mr-1"></i>MyPersonal</a>
-              <a href="{{ url_for('pay_someone') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-hand-holding-usd mr-1"></i>PaySomeone</a>
-              <a href="{{ url_for('my_term')}}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-percent mr-1"></i>MyTerm</a>
-              <a href="{{ url_for('term_products') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-percent mr-1"></i>TermProducts</a>
-              <a href="{{ url_for('my_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>MyBond</a>
-              <a href="{{ url_for('buy_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: BUY</a>
-              <a href="{{ url_for('sell_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: SELL</a>
-              <a href="{{ url_for('bond_market') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: ANALYTICS</a>
-              <a href="{{ url_for('leaderboard')}}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-trophy mr-1"></i>Leaderboard</a>
-              <a href="{{ url_for('account_settings') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-cog mr-1"></i>AccountSettings</a>
+              <a href="{{ url_for('main.my_personal') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-wallet mr-1"></i>MyPersonal</a>
+              <a href="{{ url_for('main.pay_someone') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-hand-holding-usd mr-1"></i>PaySomeone</a>
+              <a href="{{ url_for('term.my_term')}}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-percent mr-1"></i>MyTerm</a>
+              <a href="{{ url_for('term.term_products') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-percent mr-1"></i>TermProducts</a>
+              <a href="{{ url_for('bond.my_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>MyBond</a>
+              <a href="{{ url_for('bond.buy_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: BUY</a>
+              <a href="{{ url_for('bond.sell_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: SELL</a>
+              <a href="{{ url_for('bond.bond_market') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: ANALYTICS</a>
+              <a href="{{ url_for('main.leaderboard')}}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-trophy mr-1"></i>Leaderboard</a>
+              <a href="{{ url_for('main.account_settings') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-cog mr-1"></i>AccountSettings</a>
             </div>
           </div>
         </div>
