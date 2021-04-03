@@ -86,4 +86,5 @@ class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), 
                                         Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    image = RadioField('Background Image', choices=['Midway Sunrise', 'Town', 'Bomb Bridge'])
     submit = SubmitField('Update')

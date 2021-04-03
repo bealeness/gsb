@@ -124,6 +124,8 @@ def my_term():
 @app.route('/adminterm', methods=['GET', 'POST'])
 @login_required
 def admin_term():
+    if current_user.admin != True:
+        abort(403)
     form = CreateTermProduct()
     if form.validate_on_submit():
         terms = Term(name=form.name.data, maturity=form.maturity.data, rate=form.rate.data)
@@ -192,6 +194,8 @@ def bond_market():
 @app.route('/adminbond', methods=['GET', 'POST'])
 @login_required
 def admin_bond():
+    if current_user.admin != True:
+        abort(403)
     form = CreateBond()
     if form.validate_on_submit():
         bonds = Bond(name=form.name.data, ref_num=form.ref_num.data, maturity=form.maturity.data,
@@ -217,6 +221,12 @@ def account_settings():
     personal = User.query.filter_by(id=user).first_or_404()
     form = UpdateAccountForm()
     if form.validate_on_submit():
+        if form.image.data == 'Midway Sunrise':
+            current_user.image=1
+        elif form.image.data == 'Town':
+            current_user.image=2
+        elif form.image.data == 'Bomb Bridge':
+            current_user.image=3
         current_user.username=form.username.data
         current_user.email=form.email.data
         db.session.commit()
@@ -225,5 +235,6 @@ def account_settings():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        form.image.data = current_user.image
     return render_template('account_settings.html', title='AccountSettings', form=form, personal=personal)
 

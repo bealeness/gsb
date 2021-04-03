@@ -17,8 +17,16 @@
         <title>GSB</title>
     {% endif %}
 </head>
-<body style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4f/Gisborne_NZ_Sunrise_Waikanae_Beach.jpg');
+{% if current_user.image == 1 %}
+  <body style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4f/Gisborne_NZ_Sunrise_Waikanae_Beach.jpg');
               background-size: cover; font-family: 'Noto+Serif+SC', 'sans-serif';">
+{% elif current_user.image == 2 %}
+  <body style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/fc/Gladstone_Road_in_Gisborne_02.jpg');
+              background-size: cover; font-family: 'Noto+Serif+SC', 'sans-serif';">
+{% elif current_user.image == 3 %}
+  <body style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/cb/Railway_Bridge_over_Turanganui_River%2C_Gisborne.jpg');
+              background-size: cover; font-family: 'Noto+Serif+SC', 'sans-serif';">
+{% endif %}
   <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="max-width: vw100; background-color: #d35400;">
       <div class="container">
@@ -39,6 +47,10 @@
             <div class="sidebar-heading ml-3 text-muted" style="font-size: 30px;">Kia Ora {{ current_user.username }}!</div>
             <div class="sidebar-heading ml-3" style="font-size: 20px; color: #d35400;">Menu</div>
             <div class="list-group list-group-flush">
+            {% if current_user.admin == True %}
+              <a href="{{ url_for('admin_term') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminTerm</a>
+              <a href="{{ url_for('admin_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminBond</a>
+            {% endif %}
               <a href="{{ url_for('my_personal') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-wallet mr-1"></i>MyPersonal</a>
               <a href="{{ url_for('pay_someone') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-hand-holding-usd mr-1"></i>PaySomeone</a>
               <a href="{{ url_for('my_term')}}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-percent mr-1"></i>MyTerm</a>
