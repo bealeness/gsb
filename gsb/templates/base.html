@@ -28,7 +28,11 @@
               background-size: cover; font-family: 'Noto+Serif+SC', 'sans-serif';">
 {% endif %}
   <header class="site-header">
-    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="max-width: vw100; background-color: #d35400;">
+    {% if current_user.admin == True %}
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="max-width: vw100; background-color: #2d3436;">
+    {% else %}
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="max-width: vw100; background-color: #d35400;">
+    {% endif %}
       <div class="container">
         <a class="navbar-brand" style="font-family: 'Pacifico', 'sans-serif';" href="/">Gisborne Securities Bank</a>
         

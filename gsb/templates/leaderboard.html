@@ -4,7 +4,7 @@
         <h1 style="font-size: 30px; color: #d35400;">Leaderboard</h1>
         <h3 class="text-muted">Date: <span id="datetime"></span></h3>
     </div>
-    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
         <table class="table">
   <thead>
     <tr>
@@ -16,7 +16,7 @@
   </thead>
   <tbody>
     <tr>
-      <td>{{ count }}</td>
+      <td>{{ count+1 }}</td>
       <td>{{ user.username }}</td>
       <td>{{ user.total }}</td>
   {% endfor %}
@@ -28,6 +28,6 @@
 <!--JavaScript live date script-->
 <script>
 var dt = new Date();
-document.getElementById("datetime").innerHTML = ( (("0"+dt.getDate()).slice(-2))+" "+ ("0"+(dt.getMonth()+1)).slice(-2)) +" "+ (dt.getFullYear());
+document.getElementById("datetime").innerHTML = ( ((""+dt.getDate()).slice(-2))+"."+ (""+(dt.getMonth()+1)).slice(-2)) +"."+ (dt.getFullYear());
 </script>
 {% endblock %}
