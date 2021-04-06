@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="font-size: 15px;">
+    <button class="btn">
+        <a href="{{ url_for('term.my_term') }}"><i class="fas fa-chevron-left"></i>Back</a>
+    </button>
+    <br>
+    <br>
+        <h3 class="text-muted">Deposit {{ deposit.id }}</h3>
+        <hr>
+            <ul>
+                <li>Into account: <p class="text-muted">{{ deposit.receiver }}</p></li>
+                <li>DateTime: <p class="text-muted">{{ deposit.timestamp.strftime('%Y-%m-%d %H:%M') }}</p></li>
+                <li>Amount: <p class="text-muted">${{ deposit.amount }}</p></li>
+                <li>Balance: <p class="text-muted">${{ deposit.balance }}</p></li>
+                <li>Note: <p class="text-muted">{{ deposit.note }}</p></li>
+            </ul>
+</div>
+{% endblock %}

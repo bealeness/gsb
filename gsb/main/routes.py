@@ -1,5 +1,5 @@
 from gsb import db, bcrypt
-from flask import Blueprint, render_template, flash, redirect, url_for, request
+from flask import Blueprint, render_template, flash, redirect, url_for, request, abort
 from gsb.main.forms import RegistrationForm, LoginForm, PaySomeone, UpdateAccountForm
 from gsb.models import User, Receives, Sends
 from random import randint
@@ -71,6 +71,9 @@ def pay_someone():
     form = PaySomeone()
     if form.validate_on_submit():
         receiver = User.query.filter_by(account=form.receiver.data).first()
+        if receiver is None:
+            flash('That account does not exist. Enter another account.', 'danger')
+            return redirect(url_for('main.pay_someone'))
         if current_user.cash < form.amount.data:
             flash('You do not have enough funds for this payment. Enter another amount.', 'danger')
             return redirect(url_for('main.pay_someone'))
@@ -96,7 +99,7 @@ def pay_someone():
 @login_required
 def leaderboard():
     users = User.query.filter_by(admin=False).order_by(User.cash.desc()).all()
-    return render_template('leaderboard.html', title='Leaderboard', users=users, count=1)
+    return render_template('leaderboard.html', title='Leaderboard', users=users)
 
 
 @main.route('/accountsettings', methods=['GET', 'POST'])
@@ -125,12 +128,18 @@ def account_settings():
 
 
 @main.route('/send/<int:send_id>')
+@login_required
 def send(send_id):
     send = Sends.query.get_or_404(send_id)
+    if send.sender != current_user:
+        abort(403)
     return render_template('send.html', title=send.id, send=send)
 
 
 @main.route('/receive/<int:receive_id>')
+@login_required
 def receive(receive_id):
     receive = Receives.query.get_or_404(receive_id)
+    if receive.receiver != current_user:
+        abort(403)
     return render_template('receive.html', title=receive.id, receive=receive)

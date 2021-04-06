@@ -69,7 +69,7 @@ class Receives(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, 
         default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
-    note = db.Column(db.String(30), nullable=True)
+    note = db.Column(db.String(300), nullable=True)
     amount = db.Column(db.Numeric(20, 2), nullable=False)
     t_transaction = db.Column(db.Boolean, default=False, nullable=False)
     b_transaction = db.Column(db.Boolean, default=False, nullable=False)
@@ -82,7 +82,7 @@ class Sends(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, 
         default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
-    note = db.Column(db.String(30), nullable=True)
+    note = db.Column(db.String(300), nullable=True)
     amount = db.Column(db.Numeric(20, 2), nullable=False)
     t_transaction = db.Column(db.Boolean, default=False, nullable=False)
     b_transaction = db.Column(db.Boolean, default=False, nullable=False)

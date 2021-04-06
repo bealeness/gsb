@@ -1,5 +1,5 @@
 from gsb import db
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from gsb.term.forms import TermProducts, WithdrawTerm
 from gsb.models import User, Term, Receives, Sends
 from flask_login import current_user, login_required
@@ -21,10 +21,10 @@ def my_term():
         current_user.total=current_user.cash+current_user.term
         #show up in MyTerm
         receives = Receives(amount=form.amount.data, t_transaction=True, receiver_id=current_user.id, 
-                        balance=current_user.term, sender=1000010000)
+                        balance=current_user.term, sender=1000010000, note='Term withdrawl')
         #show up in MyPersonal
         receive = Receives(amount=form.amount.data, t_transaction=False, receiver_id=current_user.id,
-                        balance=current_user.cash, sender=1000010000)
+                        balance=current_user.cash, sender=1000010000, note='Term withdrawl')
         db.session.add(receives)
         db.session.add(receive)
         db.session.commit()
@@ -48,10 +48,10 @@ def term_products():
         current_user.total=current_user.cash+current_user.term
         #show up in MyTerm
         sends = Sends(amount=form.amount.data, t_transaction=True, receiver=1000010000, 
-                        balance=current_user.term, sender_id=current_user.id)
+                        balance=current_user.term, sender_id=current_user.id, note='Term deposit')
         #show up in MyPersonal
         send = Sends(amount=form.amount.data, t_transaction=False, receiver=1000010000,
-                        balance=current_user.cash, sender_id=current_user.id)
+                        balance=current_user.cash, sender_id=current_user.id, note='Term deposit')
         db.session.add(sends)
         db.session.add(send)
         db.session.commit()
@@ -61,3 +61,19 @@ def term_products():
     return render_template('term_products.html', title='TermProducts', form=form, stock=stock)
 
 
+@term.route('/deposit/<int:send_id>')
+@login_required
+def deposit(send_id):
+    deposit = Sends.query.get_or_404(send_id)
+    if deposit.sender != current_user:
+        abort(403)
+    return render_template('deposit.html', title=deposit.id, deposit=deposit)
+
+
+@term.route('/withdraw/<int:receive_id>')
+@login_required
+def withdraw(receive_id):
+    withdraw = Receives.query.get_or_404(receive_id)
+    if withdraw.receiver != current_user:
+        abort(403)
+    return render_template('withdraw.html', title=withdraw.id, withdraw=withdraw)
