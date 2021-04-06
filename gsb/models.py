@@ -7,36 +7,63 @@ import pytz
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-terms = db.Table('terms',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('term_id', db.Integer, db.ForeignKey('term.id')),
-    db.Column('balance', db.Numeric(20, 2), nullable=True),
-    db.Column('timestamp', db.DateTime, nullable=False, default=datetime.utcnow)
-    )
+
+class Terms(db.Model):
+    __tablename__ = 'terms'
+    __table_args__ = {'extend_existing': True}
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    term_id = db.Column(db.Integer, db.ForeignKey('term.id'), primary_key=True)
+    balance = db.Column(db.Numeric(20, 2), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, 
+        default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
+
+    owner = db.relationship("User", backref="term_owner")
+    term = db.relationship("Term", backref="term")
+    
 
 
-bonds = db.Table('bonds',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('bond_id', db.Integer, db.ForeignKey('bond.id')),
-    db.Column('quantity', db.Integer, nullable=False),
-    db.Column('timestamp', db.DateTime, nullable=False, default=datetime.utcnow)
-    )
+class Bonds(db.Model):
+    __tablename__ = 'bonds'
+    __table_args__ = {'extend_existing': True}
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    bond_id = db.Column(db.Integer, db.ForeignKey('bond.id'), primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, 
+        default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
+    
+    owner = db.relationship("User", backref="bond_owner")
+    bond = db.relationship("Bond", backref="bond")
 
 
-buys = db.Table('buys',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('bond_id', db.Integer, db.ForeignKey('bond.id')),
-    db.Column('quantity', db.Integer, nullable=False),
-    db.Column('bid', db.Numeric(6, 2), nullable=False)
-    )
+class Buys(db.Model):
+    __tablename__ = 'buys'
+    __table_args__ = {'extend_existing': True}
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    bond_id = db.Column(db.Integer, db.ForeignKey('bond.id'), primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    bid = db.Column(db.Numeric(6, 2), nullable=False)
+    
+    buyer = db.relationship("User", backref="buyer")
+    bond = db.relationship("Bond", backref="bond_buy")
+    
 
 
-sells = db.Table('sells',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('bond_id', db.Integer, db.ForeignKey('bond.id')),
-    db.Column('quantity', db.Integer, nullable=False),
-    db.Column('offer', db.Numeric(6, 2), nullable=False)
-    )
+class Sells(db.Model):
+    __tablename__ = 'sells'
+    __table_args__ = {'extend_existing': True}
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    bond_id = db.Column(db.Integer, db.ForeignKey('bond.id'), primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    offer = db.Column(db.Numeric(6, 2), nullable=False)
+    
+
+    seller = db.relationship("User", backref="seller")
+    bond = db.relationship("Bond", backref="bond_sell")
+    
 
 
 
@@ -52,10 +79,10 @@ class User(db.Model, UserMixin):
     term = db.Column(db.Numeric(20, 2), nullable=False)
     bond = db.Column(db.Numeric(20, 2), nullable=False)
     total = db.Column(db.Numeric(20, 2), nullable=False)
-    terms = db.relationship('Term', secondary=terms, backref=db.backref('owners', lazy='dynamic'))
-    bonds = db.relationship('Bond', secondary=bonds, backref=db.backref('owners', lazy='dynamic'))
-    buys = db.relationship('Bond', secondary=buys, backref=db.backref('buyers', lazy='dynamic'))
-    sells = db.relationship('Bond', secondary=sells, backref=db.backref('sellers', lazy='dynamic'))
+    terms = db.relationship('Term', secondary="terms")
+    bonds = db.relationship('Bond', secondary="bonds")
+    buys = db.relationship('Bond', secondary="buys")
+    sells = db.relationship('Bond', secondary="sells")
     receives = db.relationship('Receives', lazy='dynamic', backref='receiver')
     sends = db.relationship('Sends', lazy='dynamic', backref='sender')
 
@@ -90,9 +117,6 @@ class Sends(db.Model):
     balance = db.Column(db.Numeric(20,2), nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     
-    
-
-
 
 class Term(db.Model):
     id = db.Column(db.Integer, primary_key=True)

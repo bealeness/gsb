@@ -83,7 +83,7 @@
               <tr>
                 <td scope="row">{{ receive.sender }}</td>
                 <td>{{ receive.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
-                <td>{{ receive.amount }}</td>
+                <td>-{{ receive.amount }}</td>
                 <td>{{ receive.balance }}</td>
                 <td><a href="{{ url_for('term.withdraw', receive_id=receive.id) }}">Details</a></td>
               </tr>

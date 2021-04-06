@@ -2,7 +2,6 @@
 {% block content %}
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <h1 style="font-size: 30px; color: #d35400;">BondMarket: ANALYTICS</h1>
-        <h3 class="text-muted">Date: <span id="datetime"></span></h3>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -17,6 +16,7 @@
         </div>
     </div>
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+        <h3 class="text-muted">Bonds in market</h3>
         <table class="table">
             <thead>
           <tr>
@@ -42,10 +42,4 @@
         </tbody>
         </table>
     </div>
-
-<!--JavaScript live date script-->
-<script>
-var dt = new Date();
-document.getElementById("datetime").innerHTML = ( (("0"+dt.getDate()).slice(-2))+" "+ ("0"+(dt.getMonth()+1)).slice(-2)) +" "+ (dt.getFullYear());
-</script>
 {% endblock %}

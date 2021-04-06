@@ -6,22 +6,21 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Ref Number</th>
+                    <th scope="col">Buyer ID</th>
+                    <th scope="col">Bond ID</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                 </tr>
+                {% for buy in buys %}
             </thead>
             <tbody>
                 <tr>
-                    <td scope="row">21</td>
-                    <td>155.00</td>
-                    <td>800</td>
+                    <td scope="row">{{ buy.user_id }}</td>
+                    <td>{{ 100+buy.bond_id }}</td>
+                    <td>${{ buy.bid }}</td>
+                    <td>{{ buy.quantity }}</td>
                 </tr>
-                <tr>
-                    <td scope="row">24</td>
-                    <td>150.00</td>
-                    <td>450</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -30,6 +29,19 @@
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4" style="color: #d35400;">Sell Order:</legend>
+                <div class="form-group">
+                    {{ form.user.label(class="form-control-label") }}
+                    {% if form.user.errors %}
+                        {{ form.user(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.user.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.user(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
                 <div class="form-group">
                     {{ form.ref_num.label(class="form-control-label") }}
                     {% if form.ref_num.errors %}

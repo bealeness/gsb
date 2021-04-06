@@ -1,7 +1,7 @@
 from gsb import db
 from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from gsb.term.forms import TermProducts, WithdrawTerm
-from gsb.models import User, Term, Receives, Sends
+from gsb.models import User, Term, Receives, Sends, Terms
 from flask_login import current_user, login_required
 
 term = Blueprint('term', __name__)
@@ -32,6 +32,9 @@ def my_term():
         return redirect(url_for('term.my_term'))
     sends = Sends.query.filter_by(sender_id=user, t_transaction=True).order_by(Sends.timestamp.desc()).all()
     receives = Receives.query.filter_by(receiver_id=user, t_transaction=True).order_by(Receives.timestamp.desc()).all()
+    if current_user.admin == True:
+        sends = Sends.query.filter_by(t_transaction=True).order_by(Sends.timestamp.desc()).all()
+        receives = Receives.query.filter_by(t_transaction=True).order_by(Receives.timestamp.desc()).all()
     return render_template('my_term.html', title='MyTerm', personal=personal, sends=sends, form=form, receives=receives)
 
 
@@ -52,8 +55,11 @@ def term_products():
         #show up in MyPersonal
         send = Sends(amount=form.amount.data, t_transaction=False, receiver=1000010000,
                         balance=current_user.cash, sender_id=current_user.id, note='Term deposit')
+        term = Term.query.filter_by(name=form.product.data).first()
+        terms = Terms(user_id=current_user.id, term_id=term.id, balance=form.amount.data)
         db.session.add(sends)
         db.session.add(send)
+        db.session.add(terms)
         db.session.commit()
         flash('Your cash has been deposited', 'primary')
         return redirect(url_for('term.term_products'))
@@ -65,8 +71,9 @@ def term_products():
 @login_required
 def deposit(send_id):
     deposit = Sends.query.get_or_404(send_id)
-    if deposit.sender != current_user:
-        abort(403)
+    if current_user.admin != True:
+        if deposit.sender != current_user:
+            abort(403)
     return render_template('deposit.html', title=deposit.id, deposit=deposit)
 
 
@@ -74,6 +81,7 @@ def deposit(send_id):
 @login_required
 def withdraw(receive_id):
     withdraw = Receives.query.get_or_404(receive_id)
-    if withdraw.receiver != current_user:
-        abort(403)
+    if current_user.admin != True:
+        if withdraw.receiver != current_user:
+            abort(403)
     return render_template('withdraw.html', title=withdraw.id, withdraw=withdraw)

@@ -58,8 +58,8 @@ def my_personal():
     receives = Receives.query.filter_by(receiver_id=user, t_transaction=False, b_transaction=False).order_by(Receives.timestamp.desc()).all()
     sends = Sends.query.filter_by(sender_id=user, t_transaction=False, b_transaction=False).order_by(Sends.timestamp.desc()).all()
     if current_user.admin == True:
-        receives = Receives.query.order_by(Receives.timestamp.desc()).all()
-        sends = Sends.query.order_by(Sends.timestamp.desc()).all()
+        receives = Receives.query.filter_by(t_transaction=False).order_by(Receives.timestamp.desc()).all()
+        sends = Sends.query.filter_by(t_transaction=False).order_by(Sends.timestamp.desc()).all()
     return render_template('my_personal.html', title='MyPersonal', personal=personal, user=user, receives=receives, sends=sends)
 
 
@@ -131,8 +131,9 @@ def account_settings():
 @login_required
 def send(send_id):
     send = Sends.query.get_or_404(send_id)
-    if send.sender != current_user:
-        abort(403)
+    if current_user.admin != True:
+        if send.sender != current_user:
+            abort(403)
     return render_template('send.html', title=send.id, send=send)
 
 
@@ -140,6 +141,7 @@ def send(send_id):
 @login_required
 def receive(receive_id):
     receive = Receives.query.get_or_404(receive_id)
-    if receive.receiver != current_user:
-        abort(403)
+    if current_user.admin != True:
+        if receive.receiver != current_user:
+            abort(403)
     return render_template('receive.html', title=receive.id, receive=receive)

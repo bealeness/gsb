@@ -11,7 +11,7 @@
             <ul>
                 <li>From account: <p class="text-muted">{{ withdraw.sender }}</p></li>
                 <li>DateTime: <p class="text-muted">{{ withdraw.timestamp.strftime('%Y-%m-%d %H:%M') }}</p></li>
-                <li>Amount: <p class="text-muted">${{ withdraw.amount }}</p></li>
+                <li>Amount: <p class="text-muted">-${{ withdraw.amount }}</p></li>
                 <li>Balance: <p class="text-muted">${{ withdraw.balance }}</p></li>
                 <li>Note: <p class="text-muted">{{ withdraw.note }}</p></li>
             </ul>

@@ -5,25 +5,72 @@
         <h3 class="text-muted">Balance: ${{ personal.bond }}</h3>
     </div>
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+      <h3 class="text-muted">Your Bonds</h3>
         <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Note</th>
-      <th scope="col">Date</th>
-      <th scope="col">Change</th>
-      <th scope="col">Balance</th>
-      <th scope="col">Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td scope="row">Interest</td>
-      <td>23 July</td>
-      <td>20500.00</td>
-      <td>100450.00</td>
-      <td><a href="">Details</a></td>
-    </tr>
-  </tbody>
-</table>
+          <thead>
+            <tr>
+              <th scope="col">Ref Num</th>
+              <th scope="col">Quantity</th>
+            </tr>
+            {% for bond in bonds %}
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">{{ bond.bond_id+100 }}</td>
+              <td>{{ bond.quantity }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+      <h3 class="text-muted">Purchase Transaction</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Account</th>
+              <th scope="col">DateTime</th>
+              <th scope="col">Change</th>
+              <th scope="col">Balance</th>
+              <th scope="col">Details</th>
+            </tr>
+            {% for send in sends %}
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">{{ send.receiver }}</td>
+              <td>{{ send.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>{{ send.amount }}</td>
+              <td>{{ send.balance }}</td>
+              <td><a href="{{ url_for('bond.purchase', send_id=send.id) }}">Details</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+      <h3 class="text-muted">Sale Transaction</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Account</th>
+              <th scope="col">DateTime</th>
+              <th scope="col">Change</th>
+              <th scope="col">Balance</th>
+              <th scope="col">Details</th>
+            </tr>
+            {% for receive in receives %}
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">{{ receive.sender }}</td>
+              <td>{{ receive.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>-{{ receive.amount }}</td>
+              <td>{{ receive.balance }}</td>
+              <td><a href="{{ url_for('bond.sale', receive_id=receive.id) }}">Details</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
     </div>
 {% endblock %}

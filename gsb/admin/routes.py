@@ -1,7 +1,7 @@
 from gsb import db
 from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from gsb.admin.forms import CreateTermProduct, CreateBond
-from gsb.models import Term, Bond, User
+from gsb.models import Term, Bond, User, Bonds, Sells
 from flask_login import current_user, login_required
 
 
@@ -33,6 +33,13 @@ def admin_bond():
         bonds = Bond(name=form.name.data, ref_num=form.ref_num.data, maturity=form.maturity.data,
                 rate= form.rate.data, face_value=form.face_value.data, quantity=form.quantity.data)
         db.session.add(bonds)
+        db.session.commit()
+        bond = Bond.query.filter_by(name=form.name.data).first()
+        owns = Bonds(user_id=current_user.id, bond_id=bond.id, quantity=form.quantity.data)
+        db.session.add(owns)
+        db.session.commit()
+        sells = Sells(user_id=current_user.id, bond_id=bond.id, quantity=form.quantity.data, offer=form.face_value.data)
+        db.session.add(sells)
         db.session.commit()
         flash('Bond created', 'primary')
         return redirect(url_for('admin.admin_bond'))

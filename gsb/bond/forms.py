@@ -5,14 +5,16 @@ from wtforms.validators import DataRequired
 
 
 class BuyBond(FlaskForm):
-    ref_num = IntegerField('Enter the bond refernece number:', validators=[DataRequired()])
+    user = IntegerField('Enter the seller ID:', validators=[DataRequired()])
+    ref_num = IntegerField('Enter the bond ID:', validators=[DataRequired()])
     price = DecimalField('Enter your bid price:', validators=[DataRequired()], places=2)
     quantity = IntegerField('Quantity:', validators=[DataRequired()])
     submit = SubmitField('Bid')
 
 
 class SellBond(FlaskForm):
-    ref_num = IntegerField('Enter the bond refernece number:', validators=[DataRequired()])
+    user = IntegerField('Enter the buyer ID:', validators=[DataRequired()])
+    ref_num = IntegerField('Enter the bond ID:', validators=[DataRequired()])
     price = DecimalField('Enter your offer price:', validators=[DataRequired()], places=2)
     quantity = IntegerField('Quantity:', validators=[DataRequired()])
     submit = SubmitField('Offer')

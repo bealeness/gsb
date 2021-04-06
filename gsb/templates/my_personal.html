@@ -47,7 +47,7 @@
           <tr>
             <td scope="row">{{ send.receiver }}</td>
             <td>{{ send.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
-            <td>{{ send.amount }}</td>
+            <td>-{{ send.amount }}</td>
             <td>{{ send.balance }}</td>
             <td><a href="{{ url_for('main.send', send_id=send.id) }}">Details</a></td>
           </tr>
