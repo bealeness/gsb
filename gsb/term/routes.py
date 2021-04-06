@@ -60,3 +60,4 @@ def term_products():
     stock = Term.query.order_by(Term.id).all()
     return render_template('term_products.html', title='TermProducts', form=form, stock=stock)
 
+

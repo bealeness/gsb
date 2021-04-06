@@ -123,3 +123,4 @@ def account_settings():
         form.image.data = current_user.image
     return render_template('account_settings.html', title='AccountSettings', form=form, personal=personal)
 
+
