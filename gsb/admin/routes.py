@@ -1,7 +1,7 @@
 from gsb import db
 from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from gsb.admin.forms import CreateTermProduct, CreateBond
-from gsb.models import Term, Bond
+from gsb.models import Term, Bond, User
 from flask_login import current_user, login_required
 
 
@@ -39,3 +39,31 @@ def admin_bond():
     stock = Bond.query.order_by(Bond.id).all()
     return render_template('admin/adminbond.html', title='AdminBond', form=form, stock=stock)
 
+
+@admin.route('/adminusers', methods=['GET', 'POST'])
+@login_required
+def admin_users():
+    if current_user.admin != True:
+        abort(403)
+    users = User.query.order_by(User.id).all()
+    return render_template('admin/adminusers.html', title='AdminUsers', users=users)
+
+
+@admin.route('/user/<int:user_id>')
+def user(user_id):
+    if current_user.admin != True:
+        abort(403)
+    user = User.query.get_or_404(user_id)
+    return render_template('admin/user.html', title=user.id, user=user)
+
+
+@admin.route('/user/<int:user_id>/delete', methods=['POST'])
+@login_required
+def delete_user(user_id):
+    if current_user.admin != True:
+        abort(403)
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash('The user has been deleted.', 'primary')
+    return redirect(url_for('main.home'))

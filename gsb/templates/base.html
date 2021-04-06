@@ -52,6 +52,7 @@
             <div class="sidebar-heading ml-3" style="font-size: 20px; color: #d35400;">Menu</div>
             <div class="list-group list-group-flush">
             {% if current_user.admin == True %}
+              <a href="{{ url_for('admin.admin_users') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminUsers</a>
               <a href="{{ url_for('admin.admin_term') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminTerm</a>
               <a href="{{ url_for('admin.admin_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-user-lock"></i>AdminBond</a>
             {% endif %}

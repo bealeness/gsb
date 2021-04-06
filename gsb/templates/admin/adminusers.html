@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <h1 style="font-size: 30px; color: #d35400;">AdminOnlyUsers</h1>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+    <h3 class="text-muted">Users</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Username</th>
+            <th scope="col">Details</th>
+          </tr>
+        {% for user in users %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td><a href="{{ url_for('admin.user', user_id=user.id) }}">Details</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endblock %}

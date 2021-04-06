@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="font-size: 15px;">
+    <button class="btn">
+        <a href="{{ url_for('admin.admin_users') }}"><i class="fas fa-chevron-left"></i>Back</a>
+    </button>
+    <br>
+    <br>
+        <h3 class="text-muted">{{ user.username }}</h3>
+        <hr>
+            <ul>
+                <li>Email: <p class="text-muted">{{ user.email }}</p></li>
+                <li>Account: <p class="text-muted">{{ user.account }}</p></li>
+                <li>Cash: <p class="text-muted">${{ user.cash }}</p></li>
+                <li>Term: <p class="text-muted">${{ user.term }}</p></li>
+                <li>Bond: <p class="text-muted">{{ user.bond }}</p></li>
+                <li>Total: <p class="text-muted">${{ user.total }}</p></li>
+                <li>Admin: <p class="text-muted">{{ user.admin }}</p></li>
+                <li>Image: <p class="text-muted">{{ user.image }}</p></li>
+            </ul>
+            <div>
+                    <!-- delete modal is from bootstrap, paste modal is posted beneath content section-->
+                    <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+            </div>
+</div>
+<!-- Modal -->
+<!--change example to delete-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete {{ user.username }}?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
