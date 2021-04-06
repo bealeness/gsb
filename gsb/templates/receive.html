@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="font-size: 15px;">
+    <button class="btn">
+        <a href="{{ url_for('main.my_personal') }}"><i class="fas fa-chevron-left"></i>Back</a>
+    </button>
+    <br>
+    <br>
+        <h3 class="text-muted">Receive Transaction {{ receive.id }}</h3>
+        <hr>
+            <ul>
+                <li>Sender: <p class="text-muted">{{ receive.sender }}</p></li>
+                <li>DateTime: <p class="text-muted">{{ receive.timestamp.strftime('%Y-%m-%d %H:%M') }}</p></li>
+                <li>Amount: <p class="text-muted">${{ receive.amount }}</p></li>
+                <li>Balance: <p class="text-muted">${{ receive.balance }}</p></li>
+                <li>Note: <p class="text-muted">{{ receive.note }}</p></li>
+            </ul>
+</div>
+{% endblock %}

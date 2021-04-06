@@ -124,3 +124,13 @@ def account_settings():
     return render_template('account_settings.html', title='AccountSettings', form=form, personal=personal)
 
 
+@main.route('/send/<int:send_id>')
+def send(send_id):
+    send = Sends.query.get_or_404(send_id)
+    return render_template('send.html', title=send.id, send=send)
+
+
+@main.route('/receive/<int:receive_id>')
+def receive(receive_id):
+    receive = Receives.query.get_or_404(receive_id)
+    return render_template('receive.html', title=receive.id, receive=receive)
