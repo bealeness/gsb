@@ -27,14 +27,14 @@ def my_bond():
 def buy_bond():
     form = BuyBond()
     if form.validate_on_submit():
+        bond = Sells.query.filter_by(bond_id=form.ref_num.data-100).first()
+        seller = User.query.filter_by(id=form.user.data).first()
         if form.ref_num.data-100 is None:
-            flash('That is not a bond. Try another ref num.', 'danger')
+            flash('That bond is not currently for sale. Try another ref num.', 'danger')
             return redirect(url_for('bond.buy_bond'))
         if current_user.cash < form.price.data*form.quantity.data:
             flash('You do not have enough cash for this order. Enter different price or quantity amounts.', 'danger')
             return redirect(url_for('bond.buy_bond'))
-        bond = Sells.query.filter_by(bond_id=form.ref_num.data-100).first()
-        seller = User.query.filter_by(id=form.user.data).first()
         if form.quantity.data > bond.quantity:
             flash('That is a higher quantity than what is available. Enter a lower quantity.', 'danger')
             return redirect(url_for('bond.buy_bond'))
@@ -65,19 +65,35 @@ def buy_bond():
                             balance=seller.cash, receiver_id=seller.id, note='Bond sale')
             #add bond ownership to buyer
             bond = Bond.query.filter_by(id=form.ref_num.data-100).first()
-            bonds = Bonds(user_id=current_user.id, bond_id=bond.id, quantity=form.quantity.data)
-            db.session.query(Bonds).filter(Bonds.user_id == seller.id).filter(Bonds.bond_id == bond.id).\
-                update({"quantity": (Bonds.quantity-form.quantity.data)})
-            db.session.query(Sells).filter(Sells.user_id == seller.id).filter(Sells.bond_id == bond.id).\
-                update({"quantity": (Sells.quantity-form.quantity.data)})
-            db.session.add(sends)
-            db.session.add(receives)
-            db.session.add(send)
-            db.session.add(receive)
-            db.session.add(bonds)
-            db.session.commit()
-            flash('Your buy order has been executed!', 'primary')
-            return redirect(url_for('bond.buy_bond'))
+            has = Bonds.query.filter_by(user_id=current_user.id).filter_by(bond_id=bond.id).first()
+            if not has:
+                bonds = Bonds(user_id=current_user.id, bond_id=bond.id, quantity=form.quantity.data)
+                db.session.query(Bonds).filter(Bonds.user_id == seller.id).filter(Bonds.bond_id == bond.id).\
+                    update({"quantity": (Bonds.quantity-form.quantity.data)})
+                db.session.query(Sells).filter(Sells.user_id == seller.id).filter(Sells.bond_id == bond.id).\
+                    update({"quantity": (Sells.quantity-form.quantity.data)})
+                db.session.add(sends)
+                db.session.add(receives)
+                db.session.add(send)
+                db.session.add(receive)
+                db.session.add(bonds)
+                db.session.commit()
+                flash('Your buy order has been executed!', 'primary')
+                return redirect(url_for('bond.buy_bond'))
+            elif has:
+                db.session.query(Bonds).filter(Bonds.user_id == current_user.id).filter(Bonds.bond_id == bond.id).\
+                    update({"quantity": (Bonds.quantity+form.quantity.data)})
+                db.session.query(Bonds).filter(Bonds.user_id == seller.id).filter(Bonds.bond_id == bond.id).\
+                    update({"quantity": (Bonds.quantity-form.quantity.data)})
+                db.session.query(Sells).filter(Sells.user_id == seller.id).filter(Sells.bond_id == bond.id).\
+                    update({"quantity": (Sells.quantity-form.quantity.data)})
+                db.session.add(sends)
+                db.session.add(receives)
+                db.session.add(send)
+                db.session.add(receive)
+                db.session.commit()
+                flash('Your buy order has been executed!', 'primary')
+                return redirect(url_for('bond.buy_bond'))
     sells = Sells.query.order_by(Sells.quantity.desc()).all()
     return render_template('buy_bond.html', title='BuyBond', form=form, sells=sells)
 
