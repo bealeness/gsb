@@ -32,19 +32,28 @@ def buy_bond():
         if form.ref_num.data-100 is None:
             flash('That bond is not currently for sale. Try another ref num.', 'danger')
             return redirect(url_for('bond.buy_bond'))
-        if current_user.cash < form.price.data*form.quantity.data:
+        elif current_user.cash < form.price.data*form.quantity.data:
             flash('You do not have enough cash for this order. Enter different price or quantity amounts.', 'danger')
             return redirect(url_for('bond.buy_bond'))
-        if form.quantity.data > bond.quantity:
+        elif form.quantity.data > bond.quantity:
             flash('That is a higher quantity than what is available. Enter a lower quantity.', 'danger')
             return redirect(url_for('bond.buy_bond'))
-        if form.price.data < bond.offer:
-            flash('Your buy order has been placed', 'primary')
-            buys = Buys(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, bid=form.price.data)
-            db.session.add(buys)
-            db.session.commit()
-            return redirect(url_for('bond.buy_bond'))
-        if form.price.data >= bond.offer:
+        elif form.price.data < bond.offer:
+            bond = Bond.query.filter_by(id=form.ref_num.data-100).first()
+            has = Buys.query.filter_by(user_id=current_user.id).filter_by(bond_id=bond.id).first()
+            if not has:
+                buys = Buys(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, bid=form.price.data)
+                db.session.add(buys)
+                db.session.commit()
+                flash('Your buy order has been placed', 'primary')
+                return redirect(url_for('bond.buy_bond'))
+            elif has:
+                db.session.query(Buys).filter(Buys.user_id == current_user.id).filter(Buys.bond_id == bond.id).\
+                    update({"quantity": (Buys.quantity+form.quantity.data)})
+                db.session.commit()
+                flash('Your buy order has been placed', 'primary')
+                return redirect(url_for('bond.buy_bond'))
+        elif form.price.data >= bond.offer:
             current_user.cash=current_user.cash-(form.price.data*form.quantity.data)
             current_user.bond=current_user.bond+(form.price.data*form.quantity.data)
             current_user.total=current_user.cash+current_user.bond
@@ -103,21 +112,30 @@ def buy_bond():
 def sell_bond():
     form = SellBond()
     if form.validate_on_submit():
+        bond = Buys.query.filter_by(bond_id=form.ref_num.data-100).first()
+        buyer = User.query.filter_by(id=form.user.data).first()
         if form.ref_num.data-100 is None:
             flash('That is not a bond. Try another ref num.', 'danger')
             return redirect(url_for('bond.sell_bond'))
-        bond = Buys.query.filter_by(bond_id=form.ref_num.data-100).first()
-        buyer = User.query.filter_by(id=form.user.data).first()
-        if form.quantity.data > bond.quantity:
+        elif form.quantity.data > bond.quantity:
             flash('You are trying to sell too great a quantity. Enter a lower quantity.', 'danger')
-            return redirect(url_for('bond.buy_bond'))
-        if form.price.data > bond.bid:
-            flash('Your sell order has been placed', 'primary')
-            sells = Sells(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, bid=form.price.data)
-            db.session.add(sells)
-            db.session.commit()
-            return redirect(url_for('bond.buy_bond'))
-        if form.price.data <= bond.bid:
+            return redirect(url_for('bond.sell_bond'))
+        elif form.price.data > bond.bid:
+            bond = Bond.query.filter_by(id=form.ref_num.data-100).first()
+            has = Sells.query.filter_by(user_id=current_user.id).filter_by(bond_id=bond.id).first()
+            if not has:
+                sells = Sells(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, offer=form.price.data)
+                db.session.add(sells)
+                db.session.commit()
+                flash('Your sell order has been placed', 'primary')
+                return redirect(url_for('bond.sell_bond'))
+            elif has:
+                db.session.query(Sells).filter(Sells.user_id == current_user.id).filter(Sells.bond_id == bond.id).\
+                    update({"quantity": (Sells.quantity+form.quantity.data)})
+                db.session.commit()
+                flash('Your sell order has been placed', 'primary')
+                return redirect(url_for('bond.sell_bond'))
+        elif form.price.data <= bond.bid:
             current_user.cash=current_user.cash+(form.price.data*form.quantity.data)
             current_user.bond=current_user.bond-(form.price.data*form.quantity.data)
             current_user.total=current_user.cash+current_user.bond
@@ -125,26 +143,48 @@ def sell_bond():
             buyer.bond=buyer.bond+(form.price.data*form.quantity.data)
             buyer.total=buyer.cash+buyer.bond
             #show up in MyBond
-            receives = Receives(amount=form.price.data*form.quantity.data, b_transaction=True, receiver=current_user.account, 
-                            balance=current_user.bond, sender_id=buyer.id, note='Bond sale')
+            receives = Receives(amount=form.price.data*form.quantity.data, b_transaction=True, receiver_id=current_user.id, 
+                            balance=current_user.bond, sender=buyer.account, note='Bond sale')
             #show up in receivers MyBond
-            sends = Sends(amount=form.price.data*form.quantity.data, b_transaction=True, sender=buyer.account, 
-                            balance=buyer.bond, receiver_id=current_user.id, note='Bond purchase')
+            sends = Sends(amount=form.price.data*form.quantity.data, b_transaction=True, sender_id=buyer.id, 
+                            balance=buyer.bond, receiver=current_user.account, note='Bond purchase')
             #show up in MyPersonal
-            receive = Receives(amount=form.price.data*form.quantity.data, b_transaction=False, receiver=current_user.account,
-                            balance=current_user.cash, sender_id=buyer.id, note='Bond sale')
+            receive = Receives(amount=form.price.data*form.quantity.data, b_transaction=False, receiver_id=current_user.id,
+                            balance=current_user.cash, sender=buyer.account, note='Bond sale')
             #show up in receivers MyPersonal
-            send = Sends(amount=form.price.data*form.quantity.data, b_transaction=False, sender=buyer.account, 
-                            balance=buyer.cash, receiver_id=current_user.id, note='Bond purchase')
-            
-            db.session.add(sends)
-            db.session.add(receives)
-            db.session.add(send)
-            db.session.add(receive)
-            
-            db.session.commit()
-            flash('Your buy order has been executed!', 'primary')
-            return redirect(url_for('bond.sell_bond'))
+            send = Sends(amount=form.price.data*form.quantity.data, b_transaction=False, sender_id=buyer.id, 
+                            balance=buyer.cash, receiver=current_user.account, note='Bond purchase')
+            #add bond ownership to buyer
+            bond = Bond.query.filter_by(id=form.ref_num.data-100).first()
+            has = Bonds.query.filter_by(user_id=buyer.id).filter_by(bond_id=bond.id).first()
+            if not has:
+                bonds = Bonds(user_id=buyer.id, bond_id=bond.id, quantity=form.quantity.data)
+                db.session.query(Bonds).filter(Bonds.user_id == current_user.id).filter(Bonds.bond_id == bond.id).\
+                    update({"quantity": (Bonds.quantity-form.quantity.data)})
+                db.session.query(Buys).filter(Buys.user_id == buyer.id).filter(Buys.bond_id == bond.id).\
+                    update({"quantity": (Buys.quantity-form.quantity.data)})
+                db.session.add(sends)
+                db.session.add(receives)
+                db.session.add(send)
+                db.session.add(receive)
+                db.session.add(bonds)
+                db.session.commit()
+                flash('Your buy order has been executed!', 'primary')
+                return redirect(url_for('bond.sell_bond'))
+            elif has:
+                db.session.query(Bonds).filter(Bonds.user_id == buyer.id).filter(Bonds.bond_id == bond.id).\
+                    update({"quantity": (Bonds.quantity+form.quantity.data)})
+                db.session.query(Bonds).filter(Bonds.user_id == current_user.id).filter(Bonds.bond_id == bond.id).\
+                    update({"quantity": (Bonds.quantity-form.quantity.data)})
+                db.session.query(Buys).filter(Buys.user_id == buyer.id).filter(Buys.bond_id == bond.id).\
+                    update({"quantity": (Buys.quantity-form.quantity.data)})
+                db.session.add(sends)
+                db.session.add(receives)
+                db.session.add(send)
+                db.session.add(receive)
+                db.session.commit()
+                flash('Your buy order has been executed!', 'primary')
+                return redirect(url_for('bond.sell_bond'))
     buys = Buys.query.order_by(Buys.quantity.desc()).all()
     return render_template('sell_bond.html', title='SellBond', form=form, buys=buys)
 
