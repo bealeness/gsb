@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <h1 style="font-size: 30px; color: #d35400;">GSB Social</h1>
+      <div class="d-inline-block">
+        <a href="{{ url_for('main.inbox') }}">
+          <button class="btn btn-warning"><i class="fas fa-envelope"></i> Inbox</button>
+        </a>
+        <a href="{{ url_for('main.message_board') }}">
+          <button class="btn btn-warning"><i class="fas fa-address-book"></i> Message</button>
+        </a>
+      </div>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <h5 class="text-muted">Share something...</h5>
+    <form method="POST" action="">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <div class="form-group">
+            {{ form.status.label(class="form-control-label") }}
+            {% if form.status.errors %}
+                {{ form.status(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.status.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.status(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+      </fieldset>
+      <div class="form-group">
+          {{ form.submit(class="btn btn-outline-warning") }}
+      </div>
+  </form>
+  </div>
+  {% for status in statuses %}
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+    <h3><b>{{ status.poster.username }}</b></h3>
+    <h5>{{ status.status }}</h5>
+    <p class="text-muted">Posted at {{ status.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+  </div>
+  {% endfor %}
+{% endblock %}

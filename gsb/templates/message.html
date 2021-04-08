@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+      <h1 style="font-size: 30px; color: #d35400;">GSB Social</h1>
+      <a href="{{ url_for('main.inbox') }}">
+        <button class="btn btn-warning"><i class="fas fa-envelope"></i> Inbox</button>
+      </a>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4" style="color: #d35400;">Write {{ user.username }} a message</legend>
+                <div style="padding-bottom: 20px;">
+                    <button class="btn">
+                        <a href="{{ url_for('main.gsb_social') }}"><i class="fas fa-window-close"></i> Cancel</a>
+                    </button>
+                </div>
+                <div class="form-group">
+                    {{ form.message.label(class="form-control-label") }}
+                    {% if form.message.errors %}
+                        {{ form.message(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.message.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.message(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-warning") }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

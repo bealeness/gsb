@@ -12,6 +12,7 @@ def my_term():
     user = current_user.id
     personal = User.query.filter_by(id=user).first_or_404()
     form = WithdrawTerm()
+    bank = User.query.filter_by(admin=True).first()
     if form.validate_on_submit():
         if current_user.term < form.amount.data:
             flash('You do not have that amount in term. Enter another amount.', 'danger')
@@ -19,19 +20,28 @@ def my_term():
         current_user.cash=current_user.cash+form.amount.data
         current_user.term=current_user.term-form.amount.data
         current_user.total=current_user.cash+current_user.term
+        bank.cash=bank.cash-form.amount.data
         #show up in MyTerm
         receives = Receives(amount=form.amount.data, t_transaction=True, receiver_id=current_user.id, 
-                        balance=current_user.term, sender=1000010000, note='Term withdrawl')
+                        balance=current_user.term, sender=bank.account, note='Term withdrawl')
         #show up in MyPersonal
         receive = Receives(amount=form.amount.data, t_transaction=False, receiver_id=current_user.id,
-                        balance=current_user.cash, sender=1000010000, note='Term withdrawl')
-        #remove term ownership
+                        balance=current_user.cash, sender=bank.account, note='Term withdrawl')
+        #show up in banks MyTerm
+        sends = Sends(amount=form.amount.data, t_transaction=True, sender_id=bank.id, 
+                        balance=current_user.term, receiver=current_user.account, note='Term withdrawl')
+        #show up in banks MyPersonal
+        send = Sends(amount=form.amount.data, t_transaction=False, sender_id=bank.id,
+                        balance=current_user.cash, receiver=current_user.account, note='Term withdrawl')
+        #reduce term balance
         term = Term.query.filter_by(name=form.product.data).first()
         db.session.query(Terms).filter(Terms.user_id == current_user.id).filter(Terms.term_id == term.id).\
                     update({"balance": (Terms.balance-form.amount.data)})
         Terms.query.filter_by(balance=0.00).delete()
         db.session.add(receives)
         db.session.add(receive)
+        db.session.add(sends)
+        db.session.add(send)
         db.session.commit()
         flash('Your withdrawal was successful', 'primary')
         return redirect(url_for('term.my_term'))
@@ -47,28 +57,58 @@ def my_term():
 @login_required
 def term_products():
     form = TermProducts()
+    bank = User.query.filter_by(admin=True).first()
     if form.validate_on_submit():
         if current_user.cash < form.amount.data:
             flash('You do not have enough funds for this deposit. Enter another amount.', 'danger')
             return redirect(url_for('term.term_products'))
+        elif form.product.data == 'The GSB 10':
+            if form.amount.data < 10000.00:
+                flash('The minimum deposit for The GSB 10 is $10,000. Enter a higher amount.', 'danger')
+                return redirect(url_for('term.term_products'))
+        elif form.product.data == 'The GSB 20':
+            if form.amount.data < 20000.00:
+                flash('The minimum deposit for The GSB 20 is $20,000. Enter a higher amount.', 'danger')
+                return redirect(url_for('term.term_products'))
         current_user.cash=current_user.cash-form.amount.data
         current_user.term=current_user.term+form.amount.data
         current_user.total=current_user.cash+current_user.term
+        bank.cash=bank.cash+form.amount.data
         #show up in MyTerm
-        sends = Sends(amount=form.amount.data, t_transaction=True, receiver=1000010000, 
+        sends = Sends(amount=form.amount.data, t_transaction=True, receiver=bank.account, 
                         balance=current_user.term, sender_id=current_user.id, note='Term deposit')
         #show up in MyPersonal
-        send = Sends(amount=form.amount.data, t_transaction=False, receiver=1000010000,
+        send = Sends(amount=form.amount.data, t_transaction=False, receiver=bank.account,
                         balance=current_user.cash, sender_id=current_user.id, note='Term deposit')
+        #show up in banks MyTerm
+        receives = Receives(amount=form.amount.data, t_transaction=True, receiver_id=bank.id, 
+                        balance=current_user.term, sender=current_user.account, note='Term deposit')
+        #show up in banks MyPersonal
+        receive = Receives(amount=form.amount.data, t_transaction=False, receiver_id=bank.id,
+                        balance=current_user.cash, sender=current_user.account, note='Term deposit')
         #add term ownership
         term = Term.query.filter_by(name=form.product.data).first()
-        terms = Terms(user_id=current_user.id, term_id=term.id, balance=form.amount.data)
-        db.session.add(sends)
-        db.session.add(send)
-        db.session.add(terms)
-        db.session.commit()
-        flash('Your cash has been deposited', 'primary')
-        return redirect(url_for('term.term_products'))
+        has = Terms.query.filter_by(user_id=current_user.id).filter_by(term_id=term.id).first()
+        if not has:
+            terms = Terms(user_id=current_user.id, term_id=term.id, balance=form.amount.data)
+            db.session.add(sends)
+            db.session.add(send)
+            db.session.add(receive)
+            db.session.add(receives)
+            db.session.add(terms)
+            db.session.commit()
+            flash('Your cash has been deposited', 'primary')
+            return redirect(url_for('term.term_products'))
+        elif has:
+            db.session.query(Terms).filter(Terms.user_id == current_user.id).filter(Terms.term_id == term.id).\
+                    update({"balance": (Terms.balance+form.amount.data)})
+            db.session.add(sends)
+            db.session.add(send)
+            db.session.add(receives)
+            db.session.add(receive)
+            db.session.commit()
+            flash('Your term balance has been updated', 'primary')
+            return redirect(url_for('term.term_products'))
     stock = Term.query.order_by(Term.id).all()
     return render_template('term_products.html', title='TermProducts', form=form, stock=stock)
 

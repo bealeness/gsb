@@ -19,6 +19,7 @@ def admin_term():
         db.session.add(terms)
         db.session.commit()
         flash('Term created', 'primary')
+        return redirect(url_for('admin.admin_term'))
     stock = Term.query.order_by(Term.id).all()
     owners = Terms.query.order_by(Terms.user_id).all()
     return render_template('admin/adminterm.html', title='AdminTerm', form=form, stock=stock, owners=owners)
@@ -39,7 +40,8 @@ def admin_bond():
         owns = Bonds(user_id=current_user.id, bond_id=bond.id, quantity=form.quantity.data)
         db.session.add(owns)
         db.session.commit()
-        sells = Sells(user_id=current_user.id, bond_id=bond.id, quantity=form.quantity.data, offer=form.face_value.data)
+        sells = Sells(user_id=current_user.id, bond_id=bond.id, quantity=form.quantity.data, offer=form.face_value.data,
+                        rate=bond.rate, yd=bond.rate)
         db.session.add(sells)
         db.session.commit()
         flash('Bond created', 'primary')

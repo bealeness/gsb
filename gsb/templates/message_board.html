@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+      <h1 style="font-size: 30px; color: #d35400;">GSB Social</h1>
+      <div class="d-inline-block">
+        <a href="{{ url_for('main.gsb_social') }}">
+            <button class="btn btn-warning"><i class="fas fa-chevron-left"></i> Back</button>
+        </a>
+        <a href="{{ url_for('main.inbox') }}">
+            <button class="btn btn-warning"><i class="fas fa-envelope"></i> Inbox</button>
+        </a>
+      </div>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+  <h3 style="font-size: 30px; color: #d35400;">Leaderboard</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Total</th>
+          <th scope="col">Message</th>
+        </tr>
+      {% for user in users %}
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>${{ user.total }}</td>
+          {% if user == current_user %}
+          {% else %}
+          <td><a href="{{ url_for('main.message', user_id=user.id) }}"><button class="btn btn-warning"><i class="fas fa-comment"></i> Message</button></a></td>
+          {% endif %}
+      {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

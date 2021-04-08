@@ -1,7 +1,7 @@
 from gsb import db, bcrypt
 from flask import Blueprint, render_template, flash, redirect, url_for, request, abort
-from gsb.main.forms import RegistrationForm, LoginForm, PaySomeone, UpdateAccountForm
-from gsb.models import User, Receives, Sends
+from gsb.main.forms import RegistrationForm, LoginForm, PaySomeone, UpdateAccountForm, MessageForm, StatusForm
+from gsb.models import User, Receives, Sends, Messages, Statuses
 from random import randint
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -59,9 +59,6 @@ def my_personal():
     personal = User.query.filter_by(id=user).first_or_404()
     receives = Receives.query.filter_by(receiver_id=user, t_transaction=False, b_transaction=False).order_by(Receives.timestamp.desc()).all()
     sends = Sends.query.filter_by(sender_id=user, t_transaction=False, b_transaction=False).order_by(Sends.timestamp.desc()).all()
-    if current_user.admin == True:
-        receives = Receives.query.filter_by(t_transaction=False).order_by(Receives.timestamp.desc()).all()
-        sends = Sends.query.filter_by(t_transaction=False).order_by(Sends.timestamp.desc()).all()
     return render_template('my_personal.html', title='MyPersonal', personal=personal, user=user, receives=receives, sends=sends)
 
 
@@ -97,11 +94,18 @@ def pay_someone():
     return render_template('pay_someone.html', title='PaySomeone', form=form, user=user, personal=personal)
 
 
-@main.route('/leaderboard', methods=['GET', 'POST'])
+@main.route('/gsbsocial', methods=['GET', 'POST'])
 @login_required
-def leaderboard():
-    users = User.query.filter_by(admin=False).order_by(User.cash.desc()).all()
-    return render_template('leaderboard.html', title='Leaderboard', users=users)
+def gsb_social():
+    form = StatusForm()
+    if form.validate_on_submit():
+        status = Statuses(status=form.status.data, poster_id=current_user.id)
+        db.session.add(status)
+        db.session.commit()
+        flash('Your message has been shared.', 'primary')
+        return redirect(url_for('main.gsb_social'))
+    statuses = Statuses.query.order_by(Statuses.timestamp.desc()).limit(5).all()
+    return render_template('gsb_social.html', title='GSBSocial', form=form, statuses=statuses)
 
 
 @main.route('/accountsettings', methods=['GET', 'POST'])
@@ -147,3 +151,31 @@ def receive(receive_id):
         if receive.receiver != current_user:
             abort(403)
     return render_template('receive.html', title=receive.id, receive=receive)
+
+
+@main.route('/message/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def message(user_id):
+    form = MessageForm()
+    if form.validate_on_submit():
+        message = Messages(receiver=user_id, message=form.message.data, sender_id=current_user.id)
+        db.session.add(message)
+        db.session.commit()
+        flash('Your message has been sent.', 'primary')
+        return redirect(url_for('main.gsb_social'))
+    user = User.query.get_or_404(user_id)
+    return render_template('message.html', title=user.id, user=user, form=form)
+
+
+@main.route('/inbox')
+@login_required
+def inbox():
+    messages = Messages.query.filter_by(receiver=current_user.id).order_by(Messages.timestamp.desc()).all()
+    return render_template('inbox.html', title='Inbox', messages=messages)
+
+
+@main.route('/messageboard')
+@login_required
+def message_board():
+    users = User.query.filter_by(admin=False).order_by(User.cash.desc()).all()
+    return render_template('message_board.html', title='MessageBoard', users=users)
