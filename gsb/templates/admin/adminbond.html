@@ -119,4 +119,117 @@
         </tbody>
       </table>
     </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+    <h3 class="text-muted">Bond Owners</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Ref Num</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Purchase Date</th>
+          </tr>
+        {% for owner in owners %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ owner.user_id }}</td>
+            <td>{{ owner.bond_id+100 }}</td>
+            <td>{{ owner.quantity }}</td>
+            <td>{{ owner.timestamp.strftime('%Y-%m-%d') }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+      <h3 class="text-muted">Buy Orders</h3>
+      <div>
+            <!-- delete modal is from bootstrap, paste modal is posted beneath content section-->
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#delete_buysModal">Delete</button>
+      </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">User</th>
+              <th scope="col">Ref Num</th>
+              <th scope="col">Quantity</th>
+            </tr>
+            {% for buy in buys %}
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">{{ buy.user_id }}</td>
+              <td>{{ buy.bond_id+100 }}</td>
+              <td>{{ buy.quantity }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+      <h3 class="text-muted">Sell Orders</h3>
+      <div>
+            <!-- delete modal is from bootstrap, paste modal is posted beneath content section-->
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#delete_sellsModal">Delete</button>
+      </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">User</th>
+              <th scope="col">Ref Num</th>
+              <th scope="col">Quantity</th>
+            </tr>
+            {% for sell in sells %}
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">{{ sell.user_id }}</td>
+              <td>{{ sell.bond_id+100 }}</td>
+              <td>{{ sell.quantity }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    <!-- delete_buys Modal -->
+    <!--change example to delete-->
+    <div class="modal fade" id="delete_buysModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Delete all buy orders?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <form action="{{ url_for('admin.delete_buys') }}" method="POST">
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- delete_sells Modal -->
+    <!--change example to delete-->
+    <div class="modal fade" id="delete_sellsModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Delete all sell orders?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <form action="{{ url_for('admin.delete_sells') }}" method="POST">
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
 {% endblock %}

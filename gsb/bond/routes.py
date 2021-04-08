@@ -16,10 +16,12 @@ def my_bond():
     bonds = Bonds.query.filter_by(user_id=user).all()
     sends = Sends.query.filter_by(sender_id=user, b_transaction=True).order_by(Sends.timestamp.desc()).all()
     receives = Receives.query.filter_by(receiver_id=user, b_transaction=True).order_by(Receives.timestamp.desc()).all()
+    buys = Buys.query.filter_by(user_id=user).order_by(Buys.bond_id).all()
+    sells = Sells.query.filter_by(user_id=user).order_by(Sells.bond_id).all()
     if current_user.admin == True:
         sends = Sends.query.filter_by(b_transaction=True).order_by(Sends.timestamp.desc()).all()
         receives = Receives.query.filter_by(b_transaction=True).order_by(Receives.timestamp.desc()).all()
-    return render_template('my_bond.html', title='MyBond', personal=personal, sends=sends, receives=receives, bonds=bonds)
+    return render_template('my_bond.html', title='MyBond', personal=personal, sends=sends, receives=receives, bonds=bonds, buys=buys, sells=sells)
 
 
 @bond.route('/buybond', methods=['GET', 'POST'])
@@ -78,6 +80,7 @@ def buy_bond():
                     update({"quantity": (Bonds.quantity-form.quantity.data)})
                 db.session.query(Sells).filter(Sells.user_id == seller.id).filter(Sells.bond_id == bond.id).\
                     update({"quantity": (Sells.quantity-form.quantity.data)})
+                Bonds.query.filter_by(quantity=0).delete()
                 Sells.query.filter_by(quantity=0).delete()
                 db.session.add(sends)
                 db.session.add(receives)
@@ -94,6 +97,7 @@ def buy_bond():
                     update({"quantity": (Bonds.quantity-form.quantity.data)})
                 db.session.query(Sells).filter(Sells.user_id == seller.id).filter(Sells.bond_id == bond.id).\
                     update({"quantity": (Sells.quantity-form.quantity.data)})
+                Bonds.query.filter_by(quantity=0).delete()
                 Sells.query.filter_by(quantity=0).delete()
                 db.session.add(sends)
                 db.session.add(receives)
@@ -159,6 +163,7 @@ def sell_bond():
                     update({"quantity": (Bonds.quantity-form.quantity.data)})
                 db.session.query(Buys).filter(Buys.user_id == buyer.id).filter(Buys.bond_id == bond.id).\
                     update({"quantity": (Buys.quantity-form.quantity.data)})
+                Bonds.query.filter_by(quantity=0).delete()
                 Buys.query.filter_by(quantity=0).delete()
                 db.session.add(sends)
                 db.session.add(receives)
@@ -175,6 +180,7 @@ def sell_bond():
                     update({"quantity": (Bonds.quantity-form.quantity.data)})
                 db.session.query(Buys).filter(Buys.user_id == buyer.id).filter(Buys.bond_id == bond.id).\
                     update({"quantity": (Buys.quantity-form.quantity.data)})
+                Bonds.query.filter_by(quantity=0).delete()
                 Buys.query.filter_by(quantity=0).delete()
                 db.session.add(sends)
                 db.session.add(receives)
@@ -258,3 +264,5 @@ def new_sell():
             return redirect(url_for('bond.sell_bond'))
     buys = Buys.query.order_by(Buys.quantity.desc()).all()
     return render_template('new_sell.html', title=NewSell, buys=buys, form=form)
+
+

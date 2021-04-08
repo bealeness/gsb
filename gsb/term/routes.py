@@ -25,6 +25,11 @@ def my_term():
         #show up in MyPersonal
         receive = Receives(amount=form.amount.data, t_transaction=False, receiver_id=current_user.id,
                         balance=current_user.cash, sender=1000010000, note='Term withdrawl')
+        #remove term ownership
+        term = Term.query.filter_by(name=form.product.data).first()
+        db.session.query(Terms).filter(Terms.user_id == current_user.id).filter(Terms.term_id == term.id).\
+                    update({"balance": (Terms.balance-form.amount.data)})
+        Terms.query.filter_by(balance=0.00).delete()
         db.session.add(receives)
         db.session.add(receive)
         db.session.commit()
@@ -55,6 +60,7 @@ def term_products():
         #show up in MyPersonal
         send = Sends(amount=form.amount.data, t_transaction=False, receiver=1000010000,
                         balance=current_user.cash, sender_id=current_user.id, note='Term deposit')
+        #add term ownership
         term = Term.query.filter_by(name=form.product.data).first()
         terms = Terms(user_id=current_user.id, term_id=term.id, balance=form.amount.data)
         db.session.add(sends)

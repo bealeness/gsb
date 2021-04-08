@@ -74,4 +74,27 @@
         </tbody>
       </table>
     </div>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+    <h3 class="text-muted">Term Owners</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Term</th>
+            <th scope="col">Balance</th>
+            <th scope="col">Date deposited</th>
+          </tr>
+        {% for owner in owners %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ owner.user_id }}</td>
+            <td>{{ owner.term_id }}</td>
+            <td>{{ owner.balance }}</td>
+            <td>{{ owner.timestamp.strftime('%Y-%m-%d') }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 from gsb import db
 from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from gsb.admin.forms import CreateTermProduct, CreateBond
-from gsb.models import Term, Bond, User, Bonds, Sells
+from gsb.models import Term, Bond, User, Bonds, Sells, Terms, Buys
 from flask_login import current_user, login_required
 
 
@@ -20,7 +20,8 @@ def admin_term():
         db.session.commit()
         flash('Term created', 'primary')
     stock = Term.query.order_by(Term.id).all()
-    return render_template('admin/adminterm.html', title='AdminTerm', form=form, stock=stock)
+    owners = Terms.query.order_by(Terms.user_id).all()
+    return render_template('admin/adminterm.html', title='AdminTerm', form=form, stock=stock, owners=owners)
 
 
 @admin.route('/adminbond', methods=['GET', 'POST'])
@@ -44,7 +45,10 @@ def admin_bond():
         flash('Bond created', 'primary')
         return redirect(url_for('admin.admin_bond'))
     stock = Bond.query.order_by(Bond.id).all()
-    return render_template('admin/adminbond.html', title='AdminBond', form=form, stock=stock)
+    owners = Bonds.query.order_by(Bonds.user_id).all()
+    buys = Buys.query.order_by(Buys.user_id).all()
+    sells = Sells.query.order_by(Sells.user_id).all()
+    return render_template('admin/adminbond.html', title='AdminBond', form=form, stock=stock, owners=owners, buys=buys, sells=sells)
 
 
 @admin.route('/adminusers', methods=['GET', 'POST'])
@@ -73,4 +77,26 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     flash('The user has been deleted.', 'primary')
-    return redirect(url_for('main.home'))
+    return redirect(url_for('admin.admin_user'))
+
+
+@admin.route('/adminbond/delete_buys', methods=['POST'])
+@login_required
+def delete_buys():
+    if current_user.admin != True:
+        abort(403)
+    db.session.query(Buys).delete()
+    db.session.commit()
+    flash('All buy orders have been deleted.', 'primary')
+    return redirect(url_for('admin.admin_bond'))
+
+
+@admin.route('/adminbond/delete_sells', methods=['POST'])
+@login_required
+def delete_sells():
+    if current_user.admin != True:
+        abort(403)
+    db.session.query(Sells).delete()
+    db.session.commit()
+    flash('All sell orders have been deleted.', 'primary')
+    return redirect(url_for('admin.admin_bond'))

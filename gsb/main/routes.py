@@ -43,6 +43,8 @@ def register():
                     account=random, cash='100000.00', term='0.00', bond='0.00', total='100000.00')
         if user.username == "GSB Bank":
             user.admin = True
+        if user.username == "GSB Bank":
+            user.cash = '1000000.00'
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for { form.username.data }! You are now able to login.', 'success')
