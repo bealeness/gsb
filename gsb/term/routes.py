@@ -50,7 +50,7 @@ def my_term():
     if current_user.admin == True:
         sends = Sends.query.filter_by(t_transaction=True).order_by(Sends.timestamp.desc()).all()
         receives = Receives.query.filter_by(t_transaction=True).order_by(Receives.timestamp.desc()).all()
-    return render_template('my_term.html', title='MyTerm', personal=personal, sends=sends, form=form, receives=receives)
+    return render_template('terms/my_term.html', title='MyTerm', personal=personal, sends=sends, form=form, receives=receives)
 
 
 @term.route('/termproducts', methods=['GET', 'POST'])
@@ -110,7 +110,7 @@ def term_products():
             flash('Your term balance has been updated', 'primary')
             return redirect(url_for('term.term_products'))
     stock = Term.query.order_by(Term.id).all()
-    return render_template('term_products.html', title='TermProducts', form=form, stock=stock)
+    return render_template('terms/term_products.html', title='TermProducts', form=form, stock=stock)
 
 
 @term.route('/deposit/<int:send_id>')
@@ -120,7 +120,7 @@ def deposit(send_id):
     if current_user.admin != True:
         if deposit.sender != current_user:
             abort(403)
-    return render_template('deposit.html', title=deposit.id, deposit=deposit)
+    return render_template('terms/deposit.html', title=deposit.id, deposit=deposit)
 
 
 @term.route('/withdraw/<int:receive_id>')
@@ -130,4 +130,4 @@ def withdraw(receive_id):
     if current_user.admin != True:
         if withdraw.receiver != current_user:
             abort(403)
-    return render_template('withdraw.html', title=withdraw.id, withdraw=withdraw)
+    return render_template('terms/withdraw.html', title=withdraw.id, withdraw=withdraw)

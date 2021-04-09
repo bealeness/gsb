@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/e64238ecf6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+    {% if title %}
+        <title>GSB - {{ title }}</title>
+    {% else %}
+        <title>GSB</title>
+    {% endif %}
+</head>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<body style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4f/Gisborne_NZ_Sunrise_Waikanae_Beach.jpg');
+                background-size: cover;">
+    <main role="main" class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 style="color: #d35400; padding-top: 120px; font-family: 'Pacifico', sans-serif; font-size: 60px;">Gisborne Securities Bank</h1>
+                <hr>
+                <br>
+                <ul style="font-size: 18px;">
+                    <li>Open an account for an instant $100,000</li>
+                    <li>Make transfers to other account holders</li>
+                    <li>Earn interest in a term deposit</li>
+                    <li>Trade bonds for higher returns</li>
+                </ul>
+                <br>
+                <hr>
+                <h6>*Warning - this is not a real bank, nor real money, nor a real trading platform. It is a simulation only.</h6>
+            </div>
+            <div class="col-md-4">
+                <article class="shadow-lg p-1 bg white rounded" style="margin-top: 100px;">
+                    <div class="card-body" style="background-color:white; border-radius: 2px;
+                                                    max-height: 500px; overflow: scroll;
+                                                    border:solid #d35400">
+                        <div class="mt-2">
+                            <a href="{{ url_for('main.register') }}">
+                                <i class="fas fa-chevron-left"></i> Back</a>
+                        </div>
+                    <!--PDF-->
+                        <div class="card-body mt-3" style="background-color:#F8EFBA; align-items: center;
+                                                        font-family: 'Open+Sans', sans-serif; border: 1px solid;
+                                                        height:470px; box-shadow: 5px 10px;">
+                            <div class="pageheader mt-2" style="display:flex; justify-content:center;">
+                                <p><b><u>Terms of Service</u></b></p>
+                            </div>
+                            <div class="pagebody">
+                                <p>Please read these Terms of Service before registering with www.gsb.co.nz</p>
+                                <p><b>1. Not a real bank</b></p>
+                                <p>On registering with www.gsb.co.nz you recognise that GSB is a fictitious bank.</p>
+                                <p><b>2. Not real money</b></p>
+                                <p>The money used at www.gsb.co.nz is fictious money. It is NOT legal tender.</p>
+                            </div>
+                        </div>
+                        <div class="card-body mt-3 mb-5" style="background-color:#F8EFBA; align-items: center;
+                                                        font-family: 'Open+Sans', sans-serif; border: 1px solid;
+                                                        height:470px; box-shadow: 5px 10px;">
+                            <div class="pageheader mt-2" style="display:flex; justify-content:center;">
+                                <p><b><u>Terms of Service (cont..)</u></b></p>
+                            </div>
+                            <div class="pagebody">
+                                <p><b>3. Not real Term Deposits</b></p>
+                                <p>Just like the bank and its money, the term deposits are also fictitious products.</p>
+                                <p><b>4. Not real Bonds</b></p>
+                                <p>Just like the other stipulated fictions, the bonds are also fictitious.</p>
+                                <p>Otherwise - please enjoy using www.gsb.co.nz!</p>
+                                <p><u>Contact:</u> Address GSB Bank in the 'share something' window in GSB Social</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+    

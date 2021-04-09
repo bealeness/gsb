@@ -21,7 +21,7 @@ def my_bond():
     if current_user.admin == True:
         sends = Sends.query.filter_by(b_transaction=True).order_by(Sends.timestamp.desc()).all()
         receives = Receives.query.filter_by(b_transaction=True).order_by(Receives.timestamp.desc()).all()
-    return render_template('my_bond.html', title='MyBond', personal=personal, sends=sends, receives=receives, bonds=bonds, buys=buys, sells=sells)
+    return render_template('bonds/my_bond.html', title='MyBond', personal=personal, sends=sends, receives=receives, bonds=bonds, buys=buys, sells=sells)
 
 
 @bond.route('/buybond', methods=['GET', 'POST'])
@@ -107,7 +107,7 @@ def buy_bond():
                 flash('Your buy order has been executed!', 'primary')
                 return redirect(url_for('bond.buy_bond'))
     sells = Sells.query.order_by(Sells.quantity.desc()).all()
-    return render_template('buy_bond.html', title='BuyBond', form=form, sells=sells)
+    return render_template('bonds/buy_bond.html', title='BuyBond', form=form, sells=sells)
 
 
 @bond.route('/sellbond', methods=['GET', 'POST'])
@@ -190,14 +190,14 @@ def sell_bond():
                 flash('Your sell order has been executed!', 'primary')
                 return redirect(url_for('bond.sell_bond'))
     buys = Buys.query.order_by(Buys.quantity.desc()).all()
-    return render_template('sell_bond.html', title='SellBond', form=form, buys=buys)
+    return render_template('bonds/sell_bond.html', title='SellBond', form=form, buys=buys)
 
 
 @bond.route('/bondmarket', methods=['GET'])
 @login_required
 def bond_market():
     stock = Bond.query.order_by(Bond.id).all()
-    return render_template('bond_market.html', title='BondMarket', stock=stock)
+    return render_template('bonds/bond_market.html', title='BondMarket', stock=stock)
 
 
 @bond.route('/purchase/<int:send_id>')
@@ -207,7 +207,7 @@ def purchase(send_id):
     if current_user.admin != True:
         if purchase.sender != current_user:
             abort(403)
-    return render_template('purchase.html', title=purchase.id, purchase=purchase)
+    return render_template('bonds/purchase.html', title=purchase.id, purchase=purchase)
 
 
 @bond.route('/sale/<int:receive_id>')
@@ -217,7 +217,7 @@ def sale(receive_id):
     if current_user.admin != True:
         if sale.receiver != current_user:
             abort(403)
-    return render_template('sale.html', title=sale.id, sale=sale)
+    return render_template('bonds/sale.html', title=sale.id, sale=sale)
 
 
 @bond.route('/newbuy', methods=['GET', 'POST'])
@@ -240,7 +240,7 @@ def new_buy():
             flash('Your buy order has been placed', 'primary')
             return redirect(url_for('bond.buy_bond'))
     sells = Sells.query.order_by(Sells.quantity.desc()).all()
-    return render_template('new_buy.html', title=NewBuy, sells=sells, form=form)
+    return render_template('bonds/new_buy.html', title=NewBuy, sells=sells, form=form)
 
 
 @bond.route('/newsell', methods=['GET', 'POST'])
@@ -263,6 +263,6 @@ def new_sell():
             flash('Your sell order has been placed', 'primary')
             return redirect(url_for('bond.sell_bond'))
     buys = Buys.query.order_by(Buys.quantity.desc()).all()
-    return render_template('new_sell.html', title=NewSell, buys=buys, form=form)
+    return render_template('bonds/new_sell.html', title=NewSell, buys=buys, form=form)
 
 

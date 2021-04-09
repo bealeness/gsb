@@ -52,6 +52,13 @@ def register():
     return render_template("logged_out/register.html", title='Register', form=form)
 
 
+@main.route('/tos')
+def terms_of_service():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.my_personal'))
+    return render_template("logged_out/terms_of_service.html", title='TermsOfService')
+
+
 @main.route('/mypersonal', methods=['GET'])
 @login_required
 def my_personal():
