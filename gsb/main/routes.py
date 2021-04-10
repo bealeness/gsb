@@ -18,6 +18,8 @@ def home():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
+            user.active = True
+            db.session.commit()
             return redirect(next_page) if next_page else redirect(url_for('main.my_personal'))
         else:
             flash('Login unsuccessful. Please check email and password.', 'danger')
@@ -26,7 +28,10 @@ def home():
 
 @main.route('/logout')
 def logout():
+    user = User.query.filter_by(username=current_user.username).first()
     logout_user()
+    user.active = False
+    db.session.commit()
     flash('You have been logged out.', 'primary')
     return redirect(url_for('main.home'))
 
@@ -164,8 +169,10 @@ def receive(receive_id):
 @login_required
 def message(user_id):
     form = MessageForm()
+    receiver = User.query.filter_by(id=user_id).first()
     if form.validate_on_submit():
         message = Messages(receiver=user_id, message=form.message.data, sender_id=current_user.id)
+        receiver.inbox = receiver.inbox+1
         db.session.add(message)
         db.session.commit()
         flash('Your message has been sent.', 'primary')
@@ -178,7 +185,8 @@ def message(user_id):
 @login_required
 def inbox():
     messages = Messages.query.filter_by(receiver=current_user.id).order_by(Messages.timestamp.desc()).all()
-    return render_template('inbox.html', title='Inbox', messages=messages)
+    user = User.query.filter_by(id=current_user.id).first()
+    return render_template('inbox.html', title='Inbox', messages=messages, user=user)
 
 
 @main.route('/messageboard')

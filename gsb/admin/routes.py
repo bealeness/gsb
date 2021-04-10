@@ -1,7 +1,7 @@
 from gsb import db
 from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from gsb.admin.forms import CreateTermProduct, CreateBond
-from gsb.models import Term, Bond, User, Bonds, Sells, Terms, Buys
+from gsb.models import Term, Bond, User, Bonds, Sells, Terms, Buys, Sends, Receives
 from flask_login import current_user, login_required
 
 
@@ -15,7 +15,7 @@ def admin_term():
         abort(403)
     form = CreateTermProduct()
     if form.validate_on_submit():
-        terms = Term(name=form.name.data, maturity=form.maturity.data, rate=form.rate.data)
+        terms = Term(name=form.name.data, maturity=form.maturity.data, rate=form.rate.data, info=form.info.data)
         db.session.add(terms)
         db.session.commit()
         flash('Term created', 'primary')
@@ -102,3 +102,13 @@ def delete_sells():
     db.session.commit()
     flash('All sell orders have been deleted.', 'primary')
     return redirect(url_for('admin.admin_bond'))
+
+
+@admin.route('/admintransactions', methods=['GET'])
+@login_required
+def user_transactions():
+    if current_user.admin != True:
+        abort(403)
+    receives = Receives.query.filter_by(t_transaction=False, b_transaction=False).order_by(Receives.timestamp.desc()).all()
+    sends = Sends.query.filter_by(t_transaction=False, b_transaction=False).order_by(Sends.timestamp.desc()).all()
+    return render_template('admin/user_transactions.html', title='AdminTransactions', receives=receives, sends=sends)

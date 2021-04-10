@@ -41,7 +41,8 @@ def buy_bond():
             bond = Bond.query.filter_by(id=form.ref_num.data-100).first()
             has = Buys.query.filter_by(user_id=current_user.id).filter_by(bond_id=bond.id).first()
             if not has:
-                buys = Buys(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, bid=form.price.data)
+                buys = Buys(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, 
+                            bid=form.price.data, yd=(bond.rate*1000)/form.price.data)
                 db.session.add(buys)
                 db.session.commit()
                 flash('Your buy order has been placed', 'primary')
@@ -124,7 +125,8 @@ def sell_bond():
             bond = Bond.query.filter_by(id=form.ref_num.data-100).first()
             has = Sells.query.filter_by(user_id=current_user.id).filter_by(bond_id=bond.id).first()
             if not has:
-                sells = Sells(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, offer=form.price.data)
+                sells = Sells(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, 
+                                offer=form.price.data, yd=(bond.rate*1000)/form.price.data)
                 db.session.add(sells)
                 db.session.commit()
                 flash('Your sell order has been placed', 'primary')
@@ -228,7 +230,8 @@ def new_buy():
         bond = Bond.query.filter_by(id=form.ref_num.data-100).first()
         has = Buys.query.filter_by(user_id=current_user.id).filter_by(bond_id=bond.id).first()
         if not has:
-            buys = Buys(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, bid=form.price.data)
+            buys = Buys(user_id=current_user.id, bond_id=form.ref_num.data-100, 
+                        quantity=form.quantity.data, bid=form.price.data, yd=(bond.rate*1000)/form.price.data)
             db.session.add(buys)
             db.session.commit()
             flash('Your buy order has been placed', 'primary')
@@ -251,7 +254,8 @@ def new_sell():
         bond = Bond.query.filter_by(id=form.ref_num.data-100).first()
         has = Sells.query.filter_by(user_id=current_user.id).filter_by(bond_id=bond.id).first()
         if not has:
-            sells = Sells(user_id=current_user.id, bond_id=form.ref_num.data-100, quantity=form.quantity.data, offer=form.price.data)
+            sells = Sells(user_id=current_user.id, bond_id=form.ref_num.data-100, 
+                            quantity=form.quantity.data, offer=form.price.data, yd=(bond.rate*1000)/form.price.data)
             db.session.add(sells)
             db.session.commit()
             flash('Your sell order has been placed', 'primary')

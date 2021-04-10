@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="font-size: 15px;">
+    <button class="btn">
+        <a href="{{ url_for('term.term_products') }}"><i class="fas fa-chevron-left"></i>Back</a>
+    </button>
+    <br>
+    <br>
+        <h3 class="text-muted">Term{{ product.id }}</h3>
+        <hr>
+            <ul>
+                <li>Name: <p class="text-muted">{{ product.name }}</p></li>
+                <li>Maturity: <p class="text-muted">{{ product.maturity }} days</p></li>
+                <li>Rate: <p class="text-muted">{{ product.rate*100 }}%</p></li>
+                <li>Info: <p class="text-muted">{{ product.info }}</p></li>
+            </ul>
+</div>
+{% endblock %}

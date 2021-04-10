@@ -45,8 +45,8 @@ class Buys(db.Model):
     bond_id = db.Column(db.Integer, db.ForeignKey('bond.id'), primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     bid = db.Column(db.Numeric(6, 2), nullable=False)
-    rate = db.Column(db.Numeric(4, 2), nullable=False)
-    yd = db.Column(db.Numeric(4, 2), nullable=False)
+    rate = db.Column(db.Numeric(4, 2), nullable=True)
+    yd = db.Column(db.Numeric(4, 4), nullable=False)
     
     buyer = db.relationship("User", backref="buyer")
     bond = db.relationship("Bond", backref="bond_buy")
@@ -61,8 +61,8 @@ class Sells(db.Model):
     bond_id = db.Column(db.Integer, db.ForeignKey('bond.id'), primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     offer = db.Column(db.Numeric(6, 2), nullable=False)
-    rate = db.Column(db.Numeric(4, 2), nullable=False)
-    yd = db.Column(db.Numeric(4, 2), nullable=False)
+    rate = db.Column(db.Numeric(4, 2), nullable=True)
+    yd = db.Column(db.Numeric(4, 4), nullable=False)
     
 
     seller = db.relationship("User", backref="seller")
@@ -79,7 +79,9 @@ class User(db.Model, UserMixin):
     account = db.Column(db.BigInteger, unique=True, nullable=False)
     cash = db.Column(db.Numeric(20, 2), nullable=False)
     admin =  db.Column(db.Boolean, default=False, nullable=False)
+    active =  db.Column(db.Boolean, default=False, nullable=False)
     image = db.Column(db.Integer, default=1, nullable=False)
+    inbox = db.Column(db.Integer, default=0, nullable=False)
     term = db.Column(db.Numeric(20, 2), nullable=False)
     bond = db.Column(db.Numeric(20, 2), nullable=False)
     total = db.Column(db.Numeric(20, 2), nullable=False)
@@ -145,6 +147,8 @@ class Term(db.Model):
     name = db.Column(db.String(50), unique=True, nullable=False)
     maturity = db.Column(db.Integer, nullable=False)
     rate = db.Column(db.Numeric(4, 2), nullable=False)
+    info = db.Column(db.String(300), nullable=False)
+    
     
 
 

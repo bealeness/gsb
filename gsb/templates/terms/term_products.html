@@ -8,6 +8,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Maturity</th>
                     <th scope="col">Rate</th>
+                    <th scope="col">Details</th>
                 </tr>
                 {% for term in stock %}
                 </thead>
@@ -15,7 +16,8 @@
                 <tr>
                     <td scope="row">{{ term.name }}</td>
                     <td>{{ term.maturity }}</td>
-                    <td>{{ term.rate }}</td>
+                    <td>{{ term.rate*100 }}%</td>
+                    <td><a href="{{ url_for('term.product', term_id=term.id) }}">Details</a></td>
                 </tr>
                 {% endfor %}
                 </tbody>

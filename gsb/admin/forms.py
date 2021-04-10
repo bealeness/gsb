@@ -10,6 +10,7 @@ class CreateTermProduct(FlaskForm):
     name = StringField('Name:', validators=[DataRequired()])
     maturity = IntegerField('Maturity:', validators=[DataRequired()])
     rate = DecimalField('Rate:', validators=[DataRequired()], places=2)
+    info = StringField('Info:', validators=[DataRequired()])
     submit = SubmitField('CreateTerm')
 
 

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+      <h1 style="font-size: 30px; color: #d35400;">UserTransactions</h1>
+      <div style="padding-bottom: 20px;">
+        <button class="btn btn-outline-info">
+            <a href="{{ url_for('admin.admin_users') }}"> Back</a>
+        </button>
+      </div>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+    <h3 class="text-muted">Funds In</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Receiver</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Sender</th>
+            <th scope="col">DateTime</th>
+            <th scope="col">Details</th>
+          </tr>
+        {% for receive in receives %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ receive.receiver.username }} <i><u>received</i></u></td>
+            <td>${{ receive.amount }} <i><u>from</i></u></td>
+            <td>{{ receive.sender }} <i><u>at</i></u></td>
+            <td>{{ receive.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td><a href="{{ url_for('main.receive', receive_id=receive.id) }}">Details</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+    <h3 class="text-muted">Funds Out</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Sender</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Receiver</th>
+            <th scope="col">DateTime</th>
+            <th scope="col">Details</th>
+          </tr>
+        {% for send in sends %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ send.sender.username }} <i><u>sent</i></u></td>
+            <td>${{ send.amount }} <i><u>to</i></u></td>
+            <td>{{ send.receiver }} <i><u>at</i></u></td>
+            <td>{{ send.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td><a href="{{ url_for('main.send', send_id=send.id) }}">Details</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+  </div>
+{% endblock %}

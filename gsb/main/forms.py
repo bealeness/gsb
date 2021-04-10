@@ -55,5 +55,5 @@ class StatusForm(FlaskForm):
 
 class MessageForm(FlaskForm):
     message = TextAreaField('Write your message here', validators=[DataRequired(),
-                                        Length(min=1, max=300)])
+                                        Length(min=1, max=100000)])
     submit = SubmitField('Send')                              

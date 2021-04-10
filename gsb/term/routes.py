@@ -131,3 +131,10 @@ def withdraw(receive_id):
         if withdraw.receiver != current_user:
             abort(403)
     return render_template('terms/withdraw.html', title=withdraw.id, withdraw=withdraw)
+
+
+@term.route('/product/<int:term_id>')
+@login_required
+def product(term_id):
+    product = Term.query.get_or_404(term_id)
+    return render_template('terms/product.html', title=product.id, product=product)

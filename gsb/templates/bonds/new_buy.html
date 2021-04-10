@@ -10,6 +10,7 @@
                     <th scope="col">Bond ID</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Yield</th>
                 </tr>
                 {% for sell in sells %}
             </thead>
@@ -19,6 +20,7 @@
                     <td>{{ 100+sell.bond_id }}</td>
                     <td>${{ sell.offer }}</td>
                     <td>{{ sell.quantity }}</td>
+                    <td>{{ sell.yd }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -2,13 +2,20 @@
 {% block content %}
   <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
     <h1 style="font-size: 30px; color: #d35400;">GSB Social</h1>
+    {% if user.inbox == 0 %}
+      <h5>Your inbox is currently empty</h5>
+    {% elif user.inbox == 1 %}
+      <h5>You have {{ user.inbox }} message</h5>
+    {% else %}
+      <h5>You have {{ user.inbox }} messages</h5>
+    {% endif %}
       <a href="{{ url_for('main.gsb_social') }}">
         <button class="btn btn-warning"><i class="fas fa-chevron-left"></i> Back</button>
       </a>
   </div>
   {% for message in messages %}
-  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
-    <h3><b>{{ message.messager.username }}</b></h3>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="border: 6px solid #f1c40f;">
+    <h3 style="color: #d35400;"><b>{{ message.messager.username }}</b></h3>
     <h5>{{ message.message }}</h5>
     <p class="text-muted">Sent at {{ message.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
   </div>
