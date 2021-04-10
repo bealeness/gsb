@@ -47,10 +47,11 @@ def my_term():
         return redirect(url_for('term.my_term'))
     sends = Sends.query.filter_by(sender_id=user, t_transaction=True).order_by(Sends.timestamp.desc()).all()
     receives = Receives.query.filter_by(receiver_id=user, t_transaction=True).order_by(Receives.timestamp.desc()).all()
+    terms = Terms.query.filter_by(user_id=user).all()
     if current_user.admin == True:
         sends = Sends.query.filter_by(t_transaction=True).order_by(Sends.timestamp.desc()).all()
         receives = Receives.query.filter_by(t_transaction=True).order_by(Receives.timestamp.desc()).all()
-    return render_template('terms/my_term.html', title='MyTerm', personal=personal, sends=sends, form=form, receives=receives)
+    return render_template('terms/my_term.html', title='MyTerm', personal=personal, sends=sends, form=form, receives=receives, terms=terms)
 
 
 @term.route('/termproducts', methods=['GET', 'POST'])

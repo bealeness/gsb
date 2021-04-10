@@ -101,8 +101,8 @@
         </thead>
         <tbody>
           <tr>
-            <td scope="row">{{ owner.user_id }}</td>
-            <td>{{ owner.term_id }}</td>
+            <td scope="row">{{ owner.owner.username }}</td>
+            <td>{{ owner.term.name }}</td>
             <td>{{ owner.balance }}</td>
             <td>{{ owner.timestamp.strftime('%Y-%m-%d') }}</td>
           </tr>

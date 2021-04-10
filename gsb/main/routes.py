@@ -192,5 +192,5 @@ def inbox():
 @main.route('/messageboard')
 @login_required
 def message_board():
-    users = User.query.filter_by(admin=False).order_by(User.cash.desc()).all()
+    users = User.query.filter_by(admin=False).order_by(User.total.desc()).all()
     return render_template('message_board.html', title='MessageBoard', users=users)
