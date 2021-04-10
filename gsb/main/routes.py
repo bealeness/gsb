@@ -194,3 +194,9 @@ def inbox():
 def message_board():
     users = User.query.filter_by(admin=False).order_by(User.total.desc()).all()
     return render_template('message_board.html', title='MessageBoard', users=users)
+
+
+@main.route('/info')
+@login_required
+def info():
+    return render_template('info.html', title='Information')

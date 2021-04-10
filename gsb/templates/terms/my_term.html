@@ -6,43 +6,6 @@
     <h3 class="text-muted"><b>{{ term.term.name }}</b>: ${{ term.balance }}</h3>  
     {% endfor %}  
   </div>
-  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
-      <form method="POST" action="">
-          {{ form.hidden_tag() }}
-          <fieldset class="form-group">
-              <legend class="border-bottom mb-4" style="color: #d35400;">Make a withdrawal:</legend>
-              <div class="form-group">
-                    {{ form.product.label(class="form-control-label") }}
-                    {% if form.product.errors %}
-                        {{ form.product(class="form-control form-control-lg is-invalid")}}
-                        <div class="invalid-feedback">
-                            {% for error in form.product.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.product(class="form-check", type="radio") }}
-                    {% endif %}
-                </div>
-              <div class="form-group">
-                  {{ form.amount.label(class="form-control-label") }}
-                  {% if form.amount.errors %}
-                      {{ form.amount(class="form-control form-control-lg is-invalid")}}
-                      <div class="invalid-feedback">
-                          {% for error in form.amount.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.amount(class="form-control form-control-lg") }}
-                  {% endif %}
-              </div>
-          </fieldset>
-          <div class="form-group">
-              {{ form.submit(class="btn btn-outline-warning") }}
-          </div>
-      </form>
-  </div>
   <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
     <h3 class="text-muted">Funds Deposited</h3>
     <table class="table">
@@ -69,7 +32,7 @@
     </table>
   </div>
   <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
-    <h3 class="text-muted">Funds Withdrawn</h3>
+    <h3 class="text-muted">Funds Returned</h3>
     <table class="table">
       <thead>
         <tr>

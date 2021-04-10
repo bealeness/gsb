@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+      <h1 style="font-size: 30px; color: #d35400;">GSB Social</h1>
+      <div class="d-inline-block">
+        <a href="{{ url_for('main.gsb_social') }}">
+            <button class="btn btn-warning"><i class="fas fa-chevron-left"></i> Back</button>
+        </a>
+      </div>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
+  <h3 style="font-size: 30px; color: #d35400;">Information</h3>
+    <hr>
+    <div class="card-body mt-3 ml-5 mr-5" style="background-color:#F8EFBA; align-items: center;
+                                                        font-family: 'Open+Sans', sans-serif; border: 1px solid;
+                                                        height:850px; box-shadow: 5px 10px;">
+        <div class="pageheader mt-2" style="display:flex; justify-content:center;">
+            <p><b><u>A guide to using GSB</u></b></p>
+        </div>
+        <div class="pagebody">
+            <p><b>1. MyPersonal</b></p>
+            <p>The MyPersonal page is your platform to your GSB Cash account. Your cash balance and cash
+            account number are displayed at top. The Funds Sent and Funds Received windows record all
+            of your outgoing and incoming transactions respectively. For more information regarding
+            each transaction, click on the details link.</p>
+            <p><b>2. PaySomeone</b></p>
+            <p>The PaySomeone page is where you can send money to another GSB account holder. Don't someones
+            account number? Send them a message in the GSB Social page.</p>
+            <p><b>3. MyTerm</b></p>
+            <p>The MyTerm page is your platform to your GSB Term Deposit account.  When you deposit cash
+            into a term deposit the term deposit name and your balance in that deposit will be displayed
+            at the top of the page. On depositing cash your deposit transaction will be recorded in the Funds Deposited
+            window. On reception of your funds at the maturity of each term deposit, your return transaction
+            will be recorded in the Funds Returned window. For more information on each transaction click
+            on the details link.</p>
+            <p><b>4. TermProducts</b></p>
+            <p>The TermProducts page is your platform to our available term deposit products.  The maturity
+            length is denoted in days. So a maturity of 7, means that your deposit will be kept for seven 
+            days. At the conclusion of which you will be returned your balance, with the addition of the 
+            stipulated rate. So if the rate is 5% and you deposit $10,000, you will be returned $10,500 at the
+            conclusion of the stipulated maturity period. Click on the details link for more information about
+            each product.  To make a deposit, simply choose the product, enter the amount and click on deposit.
+            Be sure to deposit the minimum, or more than the minimum required for each product.</p>
+            <p><b>5. MyBond</b></p>
+            <p>The MyBond page is your platform to your GSB Bond account. When you purchase and</p>
+        </div>
+    </div>
+    <div class="card-body mt-3 ml-5 mr-5" style="background-color:#F8EFBA; align-items: center;
+                                                        font-family: 'Open+Sans', sans-serif; border: 1px solid;
+                                                        height:850px; box-shadow: 5px 10px;">
+        <div class="pagebody">
+            <p>own bonds your bond balance is displayed at the top of the page. The Your Bonds window tells
+            you how much of each particular bond you own. When you place orders to either buy or sell bonds
+            your order information is displayed in the Your Buy Orders and Your Sell Orders windows respectively.
+            Your order information will remain until they have either been executed, or until the end of trading
+            day when all buy and sell orders will be cleared. If you execute a buy order then your transaction
+            will be recorded in the Purchase Transaction window.  If you execute a sell order, then your transaction
+            will be recorded in the Sale Transaction window.</p>
+            <p><b>6. BondMarket:BUY</b></p>
+            <p>The Buy page is your portal to the buy side of the GSB Bond Market.  Any sell orders in the marketplace
+            are displayed at the top of the page. If the Seller ID is 1, then you're dealing with GSB Bank. Because
+            they are always first to sell a bond into the marketplace their offer will always be the bond face value
+            of $1,000. The Bond ID is the number particular to each bond. The quantity is the number of each bond
+            the seller has to offer. The yield is the total return on each bond the bond owner will receive at items
+            maturity.  But remember that unlike term deposits, bonds can be traded, which means their prices will vary
+            over their lifetime and that means that the yield, or the return, of a bond will increase or decrease
+            depending on the price paid for it. When the bank initiates the sale of a bond its yield will reflect its
+            underlying coupon rate, which is the return rate at face value.</p>
+            <p><b>6. BondMarket:SELL</b></p>
+            <p>The Sell page is your portal to the sell side of the GSB Bond Market. Any buy orders in the marketplace
+            are displayed at the top of the page. In this instance GSB Bank will never be present, as it does not
+            buy its own bonds after issuance. But just like the Buy page, all other details are very similar for the Sell
+            page.</p>
+            <p><b>7. BondMarket:ANALYTICS</b></p>
+            <p>The ANALYTICS page is your portal to the overall state of the GSB Bond Market. The Bonds in market
+            window displays all bonds currently in the marketplace.</p>
+            <p><b>8. GSBSocial</b></p>
+            <p>The GSB Social page is what makes GSB Bank stand out from the rest. Not only do we </p>
+        </div>
+    </div>
+    <div class="card-body mt-3 ml-5 mr-5" style="background-color:#F8EFBA; align-items: center;
+                                                        font-family: 'Open+Sans', sans-serif; border: 1px solid;
+                                                        height:850px; box-shadow: 5px 10px;">
+        <div class="pagebody">
+            <p>want to offer
+            our customers fantastic banking and financial services, but we also provide a social media service.
+            Here you can view live updates of our leaderboard, share a thought with other GSB Bank users or if 
+            you would rather interact privately, then send a message direct to another users inbox. If you wish
+            to correspond directly with GSB Bank, then simply state 'Attn: GSB Bank' into the share something
+            form, followed by your message. We will reply directly to your inbox as soon as we can. We are here
+            to help and serve your every need!</p>
+            <p><b>9. AccountSettings</b></p>
+            <p>If you would like to update your account details then do so on the AccountSettings page.
+            Additionally, we also provide you with a choice of background images from famous locations in 
+            everyone's favourite town in New Zealand - Gisborne. Sunrise at Midway Beach is the default and
+            the most stunning, but if you feel you would enjoy being in Town, then make the change. Gladstone
+            Road is just a click away.  If, on the other hand, you prefer the riverside and the picturesque
+            inner harbour, then why not choose Bomb Bridge.</p>
+            <p>We here at GSB hope that this information has been helpful. If you have any further queries, then
+            simply address GSB Bank on the GSB Social page with the following - Attn: GSB Bank - followed by
+            your query.</p>
+            <p>From all the team here at GSB Bank, we would like to wish you a fantastic day!</p>
+        </div>
+    </div>
+  </div>
+{% endblock %}
