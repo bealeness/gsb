@@ -1,7 +1,7 @@
 from gsb import db, login_manager
 from datetime import datetime
 from flask_login import UserMixin
-import pytz
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -131,7 +131,7 @@ class Statuses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, 
         default=datetime.now())
-    status = db.Column(db.String(500), nullable=False)
+    status = db.Column(db.String(), nullable=False)
     poster_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     
 

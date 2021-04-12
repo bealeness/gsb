@@ -49,11 +49,10 @@ class UpdateAccountForm(FlaskForm):
 
 
 class StatusForm(FlaskForm):
-    status = TextAreaField('', validators=[DataRequired(), Length(min=1, max=500)])
+    status = TextAreaField('', validators=[DataRequired()])
     submit = SubmitField('Share')
 
 
 class MessageForm(FlaskForm):
-    message = TextAreaField('Write your message here', validators=[DataRequired(),
-                                        Length(min=1, max=100000)])
+    message = TextAreaField('Write your message here', validators=[DataRequired()])
     submit = SubmitField('Send')                              
