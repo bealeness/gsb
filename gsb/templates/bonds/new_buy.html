@@ -26,59 +26,66 @@
             </tbody>
         </table>
     </div>
-    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4" style="color: #d35400;">New buy order:</legend>
-                <div style="padding-bottom: 20px;">
-                    <button class="btn">
-                        <a href="{{ url_for('bond.buy_bond') }}"><i class="fas fa-chevron-left"></i>Back</a>
-                    </button>
-                </div>
+    {% if current_user.market == False %}
+      <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <h1 style="font-size: 30px; color: #d35400;">Market status</h1>
+        <p>GSB Bond Market is currently closed</p>
+      </div>
+    {% elif current_user.market == True %}
+        <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4" style="color: #d35400;">New buy order:</legend>
+                    <div style="padding-bottom: 20px;">
+                        <button class="btn">
+                            <a href="{{ url_for('bond.buy_bond') }}"><i class="fas fa-chevron-left"></i>Back</a>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        {{ form.ref_num.label(class="form-control-label") }}
+                        {% if form.ref_num.errors %}
+                            {{ form.ref_num(class="form-control form-control-lg is-invalid")}}
+                            <div class="invalid-feedback">
+                                {% for error in form.ref_num.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.ref_num(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.price.label(class="form-control-label") }}
+                        {% if form.price.errors %}
+                            {{ form.price(class="form-control form-control-lg is-invalid")}}
+                            <div class="invalid-feedback">
+                                {% for error in form.price.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.price(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.quantity.label(class="form-control-label") }}
+                        {% if form.quantity.errors %}
+                            {{ form.quantity(class="form-control form-control-lg is-invalid")}}
+                            <div class="invalid-feedback">
+                                {% for error in form.quantity.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.quantity(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                </fieldset>
                 <div class="form-group">
-                    {{ form.ref_num.label(class="form-control-label") }}
-                    {% if form.ref_num.errors %}
-                        {{ form.ref_num(class="form-control form-control-lg is-invalid")}}
-                        <div class="invalid-feedback">
-                            {% for error in form.ref_num.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.ref_num(class="form-control form-control-lg") }}
-                    {% endif %}
+                    {{ form.submit(class="btn btn-outline-warning") }}
                 </div>
-                <div class="form-group">
-                    {{ form.price.label(class="form-control-label") }}
-                    {% if form.price.errors %}
-                        {{ form.price(class="form-control form-control-lg is-invalid")}}
-                        <div class="invalid-feedback">
-                            {% for error in form.price.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.price(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.quantity.label(class="form-control-label") }}
-                    {% if form.quantity.errors %}
-                        {{ form.quantity(class="form-control form-control-lg is-invalid")}}
-                        <div class="invalid-feedback">
-                            {% for error in form.quantity.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.quantity(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-warning") }}
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}

@@ -34,7 +34,7 @@
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="max-width: vw100; background-color: #d35400;">
     {% endif %}
       <div class="container">
-        <a class="navbar-brand" style="font-family: 'Pacifico', 'sans-serif';" href="/">Gisborne Securities Bank</a>
+        <a class="navbar-brand" style="font-family: 'Pacifico', 'sans-serif';" href="/"><i class="fas fa-sun"></i> Gisborne Securities Bank</a>
         
           <div class="navbar-nav">
             <a class="nav-item nav-link" href="{{ url_for('main.logout') }}"><b><i class="fas fa-sign-out-alt mr-1"></i>Logout</b></a>
@@ -63,7 +63,7 @@
               <a href="{{ url_for('bond.my_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>MyBond</a>
               <a href="{{ url_for('bond.buy_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: BUY</a>
               <a href="{{ url_for('bond.sell_bond') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: SELL</a>
-              <a href="{{ url_for('bond.bond_market') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: ANALYTICS</a>
+              <a href="{{ url_for('bond.bond_market') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-poll mr-1"></i>BondMarket: MARKET</a>
               <a href="{{ url_for('main.gsb_social')}}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-users"></i>GSB Social</a>
               <a href="{{ url_for('main.account_settings') }}" class="list-group-item list-group-item-action bg-light"><i class="fas fa-cog mr-1"></i>AccountSettings</a>
             </div>

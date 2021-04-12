@@ -1,16 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
-        <h1 style="font-size: 30px; color: #d35400;">BondMarket: ANALYTICS</h1>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-        </div>
-        <div class="col-md-6">
-            <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="text-align: center;">
-                <img style="width: 300px;" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Sample_Pie_Chart.png" alt="">
-            </div>
-        </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <h1 style="font-size: 30px; color: #d35400;">BondMarket: MARKET</h1>
     </div>
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
         <h3 class="text-muted">Bonds in market</h3>
@@ -23,6 +14,7 @@
             <th scope="col">Coupon</th>
             <th scope="col">FaceValue</th>
             <th scope="col">Quantity</th>
+            <th scope="col">Details</th>
           </tr>
         {% for bond in stock %}
         </thead>
@@ -34,9 +26,21 @@
             <td>{{ bond.rate*100 }}%</td>
             <td>{{ bond.face_value }}</td>
             <td>{{ bond.quantity }}</td>
+            <td><a href="{{ url_for('bond.bond_product', bond_id=bond.id) }}">Details</a></td>
           </tr>
         {% endfor %}
         </tbody>
         </table>
     </div>
+    {% if current_user.market == False %}
+      <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <h3 class="text-muted">Market status</h3>
+        <p>GSB Bond Market is currently CLOSED</p>
+      </div>
+    {% elif current_user.market == True %}
+      <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+        <h3 class="text-muted">Market status</h3>
+        <p style="color: #2ecc71;">GSB Bond Market is OPEN</p>
+      </div>
+    {% endif %}
 {% endblock %}

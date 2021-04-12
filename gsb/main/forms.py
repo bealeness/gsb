@@ -36,7 +36,7 @@ class LoginForm(FlaskForm):
 class PaySomeone(FlaskForm):
     receiver = IntegerField('Enter the receivers account number:', validators=[DataRequired()])
     amount = DecimalField('Enter the amount:', validators=[DataRequired()], places=2)
-    note = StringField('Write a short note (optional-maximum 30 characters):', validators=[Optional(), Length(min=1, max=30)])
+    note = StringField('Write a short note (optional-maximum 60 characters):', validators=[Optional(), Length(min=1, max=60)])
     submit = SubmitField('Send')
 
 

@@ -2,6 +2,9 @@
 {% block content %}
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <h1 style="font-size: 30px; color: #d35400;">AdminOnlyBondCreation</h1>
+        <button class="btn btn-outline-info mb-1 mt-1">
+      <a href="{{ url_for('admin.market') }}">Market</a>
+    </button>
     </div>
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
         <form method="POST" action="">
@@ -86,6 +89,19 @@
                         {{ form.quantity(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+                <div class="form-group">
+                    {{ form.info.label(class="form-control-label") }}
+                    {% if form.info.errors %}
+                        {{ form.info(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.info.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.info(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-warning") }}
@@ -103,6 +119,7 @@
             <th scope="col">Rate</th>
             <th scope="col">FaceValue</th>
             <th scope="col">Quantity</th>
+            <th scope="col">Details</th>
           </tr>
         {% for bond in stock %}
         </thead>
@@ -114,6 +131,7 @@
             <td>{{ bond.rate }}</td>
             <td>{{ bond.face_value }}</td>
             <td>{{ bond.quantity }}</td>
+            <td><a href="{{ url_for('admin.admin_product', bond_id=bond.id) }}">Details</a></td>
           </tr>
         {% endfor %}
         </tbody>
@@ -121,6 +139,9 @@
     </div>
     <div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="max-height: 500px; overflow: scroll;">
     <h3 class="text-muted">Bond Owners</h3>
+    <button class="btn btn-outline-info mb-1 mt-1">
+      <a href="{{ url_for('admin.bond_owner') }}">CashOut</a>
+    </button>
       <table class="table">
         <thead>
           <tr>
@@ -159,7 +180,7 @@
           </thead>
           <tbody>
             <tr>
-              <td scope="row">{{ buy.user_id }}</td>
+              <td scope="row">{{ buy.buyer.username }}</td>
               <td>{{ buy.bond_id+100 }}</td>
               <td>{{ buy.quantity }}</td>
             </tr>
@@ -184,7 +205,7 @@
           </thead>
           <tbody>
             <tr>
-              <td scope="row">{{ sell.user_id }}</td>
+              <td scope="row">{{ sell.seller.username }}</td>
               <td>{{ sell.bond_id+100 }}</td>
               <td>{{ sell.quantity }}</td>
             </tr>

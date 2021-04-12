@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+      <form method="POST" action="">
+          {{ form.hidden_tag() }}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4" style="color: #d35400;">Term Owners:</legend>
+              <button class="btn mb-4">
+                <a href="{{ url_for('admin.admin_term') }}"><i class="fas fa-chevron-left"></i>Back</a>
+              </button>
+              <div class="form-group">
+                  {{ form.user.label(class="form-control-label") }}
+                  {% if form.user.errors %}
+                      {{ form.user(class="form-control form-control-lg is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.user.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.user(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                  {{ form.term_id.label(class="form-control-label") }}
+                  {% if form.term_id.errors %}
+                      {{ form.term_id(class="form-control form-control-lg is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.term_id.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.term_id(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                  {{ form.balance.label(class="form-control-label") }}
+                  {% if form.balance.errors %}
+                      {{ form.balance(class="form-control form-control-lg is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.balance.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.balance(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+          </fieldset>
+          <div class="form-group">
+              {{ form.submit(class="btn btn-outline-warning") }}
+          </div>
+      </form>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <h3 class="text-muted">Term Owners</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Term ID</th>
+            <th scope="col">Balance</th>
+            <th scope="col">Purchase Date</th>
+          </tr>
+        {% for owner in owners %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ owner.user_id }}</td>
+            <td>{{ owner.term_id }}</td>
+            <td>{{ owner.balance }}</td>
+            <td>{{ owner.timestamp.strftime('%Y-%m-%d') }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endblock %}

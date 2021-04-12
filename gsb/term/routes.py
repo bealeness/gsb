@@ -37,9 +37,13 @@ def term_products():
             if form.amount.data < 20000.00:
                 flash('The minimum deposit for The GSB 20 is $20,000. Enter a higher amount.', 'danger')
                 return redirect(url_for('term.term_products'))
+        elif form.product.data == 'The GSB 50':
+            if form.amount.data < 50000.00:
+                flash('The minimum deposit for The GSB 50 is $50,000. Enter a higher amount.', 'danger')
+                return redirect(url_for('term.term_products'))
         current_user.cash=current_user.cash-form.amount.data
         current_user.term=current_user.term+form.amount.data
-        current_user.total=current_user.cash+current_user.term
+        current_user.total=current_user.cash+current_user.term+current_user.bond
         bank.cash=bank.cash+form.amount.data
         #show up in MyTerm
         sends = Sends(amount=form.amount.data, t_transaction=True, receiver=bank.account, 

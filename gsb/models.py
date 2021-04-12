@@ -16,7 +16,7 @@ class Terms(db.Model):
     term_id = db.Column(db.Integer, db.ForeignKey('term.id'), primary_key=True)
     balance = db.Column(db.Numeric(20, 2), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, 
-        default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
+        default=datetime.now())
 
     owner = db.relationship("User", backref="term_owner")
     term = db.relationship("Term", backref="term")
@@ -31,7 +31,7 @@ class Bonds(db.Model):
     bond_id = db.Column(db.Integer, db.ForeignKey('bond.id'), primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, 
-        default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
+        default=datetime.now())
     
     owner = db.relationship("User", backref="bond_owner")
     bond = db.relationship("Bond", backref="bond")
@@ -80,6 +80,7 @@ class User(db.Model, UserMixin):
     cash = db.Column(db.Numeric(20, 2), nullable=False)
     admin =  db.Column(db.Boolean, default=False, nullable=False)
     active =  db.Column(db.Boolean, default=False, nullable=False)
+    market =  db.Column(db.Boolean, default=False, nullable=False)
     image = db.Column(db.Integer, default=1, nullable=False)
     inbox = db.Column(db.Integer, default=0, nullable=False)
     term = db.Column(db.Numeric(20, 2), nullable=False)
@@ -103,8 +104,8 @@ class User(db.Model, UserMixin):
 class Receives(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, 
-        default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
-    note = db.Column(db.String(300), nullable=True)
+        default=datetime.now())
+    note = db.Column(db.String(60), nullable=True)
     amount = db.Column(db.Numeric(20, 2), nullable=False)
     t_transaction = db.Column(db.Boolean, default=False, nullable=False)
     b_transaction = db.Column(db.Boolean, default=False, nullable=False)
@@ -116,8 +117,8 @@ class Receives(db.Model):
 class Sends(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, 
-        default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
-    note = db.Column(db.String(30), nullable=True)
+        default=datetime.now())
+    note = db.Column(db.String(60), nullable=True)
     amount = db.Column(db.Numeric(20, 2), nullable=False)
     t_transaction = db.Column(db.Boolean, default=False, nullable=False)
     b_transaction = db.Column(db.Boolean, default=False, nullable=False)
@@ -129,7 +130,7 @@ class Sends(db.Model):
 class Statuses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, 
-        default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
+        default=datetime.now())
     status = db.Column(db.String(100), nullable=False)
     poster_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     
@@ -137,7 +138,7 @@ class Statuses(db.Model):
 class Messages(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, 
-        default=datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Pacific/Auckland")))
+        default=datetime.now())
     receiver = db.Column(db.Integer, nullable=False)
     message = db.Column(db.String(300), nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
@@ -160,6 +161,7 @@ class Bond(db.Model):
     rate = db.Column(db.Numeric(4, 2), nullable=False)
     face_value = db.Column(db.Numeric(6, 2), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
+    info = db.Column(db.String(300), nullable=False)
 
 
 

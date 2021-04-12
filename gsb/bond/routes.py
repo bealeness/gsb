@@ -56,10 +56,10 @@ def buy_bond():
         elif form.price.data >= bond.offer:
             current_user.cash=current_user.cash-(form.price.data*form.quantity.data)
             current_user.bond=current_user.bond+(form.price.data*form.quantity.data)
-            current_user.total=current_user.cash+current_user.bond
+            current_user.total=current_user.cash+current_user.bond+current_user.term
             seller.cash=seller.cash+(form.price.data*form.quantity.data)
             seller.bond=seller.bond-(form.price.data*form.quantity.data)
-            seller.total=seller.cash+seller.bond
+            seller.total=seller.cash+seller.bond+seller.term
             #show up in MyBond
             sends = Sends(amount=form.price.data*form.quantity.data, b_transaction=True, receiver=seller.account, 
                             balance=current_user.bond, sender_id=current_user.id, note='Bond purchase')
@@ -67,7 +67,7 @@ def buy_bond():
             receives = Receives(amount=form.price.data*form.quantity.data, b_transaction=True, sender=current_user.account, 
                             balance=seller.bond, receiver_id=seller.id, note='Bond sale')
             #show up in MyPersonal
-            send = Sends(amount=form.price.data*form.quantity.data, t_transaction=False, receiver=seller.account,
+            send = Sends(amount=form.price.data*form.quantity.data, b_transaction=False, receiver=seller.account,
                             balance=current_user.cash, sender_id=current_user.id, note='Bond purchase')
             #show up in senders MyPersonal
             receive = Receives(amount=form.price.data*form.quantity.data, b_transaction=False, sender=current_user.account, 
@@ -140,10 +140,10 @@ def sell_bond():
         elif form.price.data <= bond.bid:
             current_user.cash=current_user.cash+(form.price.data*form.quantity.data)
             current_user.bond=current_user.bond-(form.price.data*form.quantity.data)
-            current_user.total=current_user.cash+current_user.bond
+            current_user.total=current_user.cash+current_user.bond+current_user.term
             buyer.cash=buyer.cash-(form.price.data*form.quantity.data)
             buyer.bond=buyer.bond+(form.price.data*form.quantity.data)
-            buyer.total=buyer.cash+buyer.bond
+            buyer.total=buyer.cash+buyer.bond+buyer.term
             #show up in MyBond
             receives = Receives(amount=form.price.data*form.quantity.data, b_transaction=True, receiver_id=current_user.id, 
                             balance=current_user.bond, sender=buyer.account, note='Bond sale')
@@ -270,3 +270,8 @@ def new_sell():
     return render_template('bonds/new_sell.html', title=NewSell, buys=buys, form=form)
 
 
+@bond.route('/bondproduct/<int:bond_id>')
+@login_required
+def bond_product(bond_id):
+    bond = Bond.query.get_or_404(bond_id)
+    return render_template('bonds/bond.html', title=bond_id, bond=bond)

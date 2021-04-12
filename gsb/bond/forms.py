@@ -30,4 +30,6 @@ class NewSell(FlaskForm):
     price = DecimalField('Enter your offer price:', validators=[DataRequired()], places=2)
     quantity = IntegerField('Quantity:', validators=[DataRequired()])
     submit = SubmitField('Offer')
-    
+
+
+

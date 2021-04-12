@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+      <form method="POST" action="">
+          {{ form.hidden_tag() }}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4" style="color: #d35400;">Bond Owners:</legend>
+              <button class="btn mb-4">
+                <a href="{{ url_for('admin.admin_bond') }}"><i class="fas fa-chevron-left"></i>Back</a>
+              </button>
+              <div class="form-group">
+                  {{ form.user.label(class="form-control-label") }}
+                  {% if form.user.errors %}
+                      {{ form.user(class="form-control form-control-lg is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.user.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.user(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                  {{ form.ref_num.label(class="form-control-label") }}
+                  {% if form.ref_num.errors %}
+                      {{ form.ref_num(class="form-control form-control-lg is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.ref_num.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.ref_num(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                  {{ form.quantity.label(class="form-control-label") }}
+                  {% if form.quantity.errors %}
+                      {{ form.quantity(class="form-control form-control-lg is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.quantity.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.quantity(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+          </fieldset>
+          <div class="form-group">
+              {{ form.submit(class="btn btn-outline-warning") }}
+          </div>
+      </form>
+  </div>
+  <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+    <h3 class="text-muted">Bond Owners</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Ref Num</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Purchase Date</th>
+          </tr>
+        {% for owner in owners %}
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="row">{{ owner.user_id }}</td>
+            <td>{{ owner.bond_id+100 }}</td>
+            <td>{{ owner.quantity }}</td>
+            <td>{{ owner.timestamp.strftime('%Y-%m-%d') }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endblock %}

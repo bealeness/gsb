@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="font-size: 15px;">
+    <button class="btn">
+        <a href="{{ url_for('admin.admin_bond') }}"><i class="fas fa-chevron-left"></i>Back</a>
+    </button>
+    <div class="card-body shadow-lg p-3 mb-5 bg-white rounded">
+      <form method="POST" action="">
+          {{ form.hidden_tag() }}
+              <div class="form-group">
+                  {{ form.status.label(class="form-control-label") }}
+                  {% if form.status.errors %}
+                      {{ form.status(class="form-control form-control-lg is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.status.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.status(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+          </fieldset>
+          <div class="form-group">
+              {{ form.submit(class="btn btn-outline-warning") }}
+          </div>
+      </form>
+  </div>
+</div>
+{% endblock %}

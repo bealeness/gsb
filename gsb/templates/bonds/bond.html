@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body shadow-lg p-3 mb-5 bg-white rounded" style="font-size: 15px;">
+    <button class="btn">
+        <a href="{{ url_for('bond.bond_market') }}"><i class="fas fa-chevron-left"></i>Back</a>
+    </button>
+    <br>
+    <br>
+        <h3 class="text-muted">Bond{{ bond.id }}</h3>
+        <hr>
+            <ul>
+                <li>Name: <p class="text-muted">{{ bond.name }}</p></li>
+                <li>RefNum: <p class="text-muted">{{ bond.ref_num }}</p></li>
+                <li>Maturity: <p class="text-muted">{{ bond.maturity }} days</p></li>
+                <li>Coupon: <p class="text-muted">{{ bond.rate*100 }}%</p></li>
+                <li>FaceValue: <p class="text-muted">${{ bond.face_value }}</p></li>
+                <li>Quantity: <p class="text-muted">{{ bond.quantity }}</p></li>
+                <li>Info: <p class="text-muted">{{ bond.info }}</p></li>
+            </ul>
+</div>
+{% endblock %}
