@@ -80,7 +80,7 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     flash('The user has been deleted.', 'primary')
-    return redirect(url_for('admin.admin_user'))
+    return redirect(url_for('admin.admin_users'))
 
 
 @admin.route('/adminbond/delete_buys', methods=['POST'])
