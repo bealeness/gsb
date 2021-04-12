@@ -49,7 +49,7 @@ class UpdateAccountForm(FlaskForm):
 
 
 class StatusForm(FlaskForm):
-    status = StringField('', validators=[DataRequired(), Length(min=1, max=100)])
+    status = TextAreaField('', validators=[DataRequired(), Length(min=1, max=500)])
     submit = SubmitField('Share')
 
 
